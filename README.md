@@ -12,17 +12,18 @@ pip install foobar
 
 ## Usage
 
-```python
-import foobar
+```FILAMENT COMMAND
+php artisan migrate:fresh
 
-# returns 'words'
-foobar.pluralize('word')
+php artisan db:seed
 
-# returns 'geese'
-foobar.pluralize('goose')
+php artisan shield:setup
 
-# returns 'phenomenon'
-foobar.singularize('phenomena')
+php artisan make:filament-user
+
+php artisan shield:generate --all
+
+php artisan shield:super-admin
 ```
 
 ## Contributing
