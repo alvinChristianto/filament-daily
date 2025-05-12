@@ -14,7 +14,7 @@ class PaymentSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('Payments')->insert([
+        DB::table('payments')->insert([
             [
                 'name' => 'CASH',
                 'type' => 'CASH',
