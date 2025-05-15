@@ -29,7 +29,8 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->brandName('Yuli Sistem')
-            ->favicon(asset('logo.JPG'))
+            ->favicon(asset('logo.jpg'))
+            // ->brandLogo(asset('logo.jpg'))
             ->login()
             ->font('Roboto')
             ->colors([
