@@ -18,6 +18,8 @@ class DatabaseSeeder extends Seeder
             AcCustomerSeeder::class,
             PaymentSeeder::class,
             AcWorkingReportSeeder::class,
+            SparepartSeeder::class,
+            SparepartStockSeeder::class
 
         ]);
     }
