@@ -322,27 +322,46 @@ class AcWorkingReportResource extends Resource
             ->filters([
                 Tables\Filters\Filter::make('created_at')
                     ->form([
-                        DatePicker::make('created_from'),
-                        DatePicker::make('created_until'),
+                        DatePicker::make('dibuat dari'),
+                        DatePicker::make('dibuat sampai'),
                     ])
                     ->indicateUsing(function (array $data): ?string {
-                        if (!$data['created_from'] && !$data['created_until']) {
+                        if (!$data['dibuat dari'] && !$data['dibuat sampai']) {
                             return null;
                         }
-                        $indicatorFrom = 'Created from ' . Carbon::parse($data['created_from'])->toFormattedDateString();
-                        $indicatorUntil = ' to ' . Carbon::parse($data['created_until'])->toFormattedDateString();
+                        $indicatorFrom = 'dibuat dari ' . Carbon::parse($data['dibuat dari'])->toFormattedDateString();
+                        $indicatorUntil = ' to ' . Carbon::parse($data['dibuat sampai'])->toFormattedDateString();
                         return $indicatorFrom . " " . $indicatorUntil;
                     })
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
                             ->when(
-                                $data['created_from'],
+                                $data['dibuat dari'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
-                                $data['created_until'],
+                                $data['dibuat sampai'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
+                    }),
+                Tables\Filters\Filter::make('Tanggal Service terdekat')
+                    ->form([
+                        DatePicker::make('Pengingat Service dari'),
+                    ])
+                     ->indicateUsing(function (array $data): ?string {
+                        if (!$data['Pengingat Service dari'] ) {
+                            return null;
+                        }
+                        $indicatorFrom = 'reminder service dari ' . Carbon::parse($data['Pengingat Service dari'])->toFormattedDateString();
+                        return $indicatorFrom;
+                    })
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['Pengingat Service dari'],
+                                fn (Builder $query, $date): Builder => $query->whereDate('next_service_date', '>=', $date),
+                            );
+                            
                     }),
                 Tables\Filters\SelectFilter::make('id_payment')
                     ->label('Payment')

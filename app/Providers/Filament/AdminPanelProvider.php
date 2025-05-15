@@ -30,7 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->brandName('Yuli Sistem')
             ->favicon(asset('logo.jpg'))
-            // ->brandLogo(asset('logo.jpg'))
+            ->brandLogo(asset('logo.jpg'))
             ->login()
             ->font('Roboto')
             ->colors([
