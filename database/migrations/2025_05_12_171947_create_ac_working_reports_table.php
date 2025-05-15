@@ -18,12 +18,13 @@ return new class extends Migration
             $table->foreignId('id_payment')->references('id')->on('payments');
 
             $table->string('title', length: 100);
+            $table->string('address', length: 100)->nullable();
             $table->text('working_description')->nullable();
 
             $table->dateTime('in_time');
             $table->dateTime('out_time');
             $table->string('image_working')->nullable();
-            $table->json('sparepart_detail')->nullable();     //tipe, amount
+            $table->json('transaction_detail')->nullable();     //tipe, amount
 
             $table->integer('total_price')->nullable();
             $table->integer('discount')->nullable();

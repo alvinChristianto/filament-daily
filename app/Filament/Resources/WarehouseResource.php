@@ -20,6 +20,7 @@ class WarehouseResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     
     protected static ?string $navigationLabel = 'Gudang/Outlet';
+    protected static ?string $navigationGroup = 'Master';
 
     protected static ?string $modelLabel = 'Gudang/Outlet';
 

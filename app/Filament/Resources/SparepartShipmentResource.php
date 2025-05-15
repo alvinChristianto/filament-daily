@@ -23,6 +23,10 @@ class SparepartShipmentResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationLabel = 'Pengiriman Sparepart';
+    protected static ?string $navigationGroup = 'Master Sparepart';
+
+    protected static ?string $modelLabel = 'Pengiriman Sparepart';
     public static function form(Form $form): Form
     {
 
