@@ -29,8 +29,15 @@ class SparepartResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->label('nama sparepart')
                     ->maxLength(100),
                 Forms\Components\TextInput::make('price')
+                    ->label('harga beli')
+                    ->required()
+                    ->numeric()
+                    ->prefix('Rp'),
+                Forms\Components\TextInput::make('sell_price')
+                    ->label('harga jual')
                     ->required()
                     ->numeric()
                     ->prefix('Rp'),
@@ -61,6 +68,11 @@ class SparepartResource extends Resource
                     ->label('Nama Barang')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('price')
+                    ->label('Harga Beli')
+                    ->money('idr')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('sell_price')
+                    ->label('Harga Jual')
                     ->money('idr')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('origin_from')
@@ -97,6 +109,7 @@ class SparepartResource extends Resource
     {
         return [
             RelationManagers\SparepartShipmentRelationManager::class,
+            RelationManagers\SparepartStocksRelationManager::class,
         ];
     }
 

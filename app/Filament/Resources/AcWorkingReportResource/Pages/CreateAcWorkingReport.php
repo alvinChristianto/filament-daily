@@ -7,6 +7,7 @@ use App\Models\SparepartStock;
 use Carbon\Carbon;
 use Filament\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use Illuminate\Support\Facades\Log;
 
 class CreateAcWorkingReport extends CreateRecord
 {
@@ -26,10 +27,7 @@ class CreateAcWorkingReport extends CreateRecord
 
         $transformId = "INV_" . $year . $month . $day . $randomDigits;
         $data['id_report'] = $transformId;
-        dd($data);
         foreach ($data['transaction_detail'] as $item) {
-
-            $item['box_varian'] = ($item['box_varian'] == '8') ? 'box_8' : (($item['box_varian'] == '18') ? 'box_18' : $item['box_varian']);
 
             $stockFromGudang = SparepartStock::all()
                 ->where('id_sparepart', $item["id_sparepart"])
@@ -46,19 +44,21 @@ class CreateAcWorkingReport extends CreateRecord
                 ->where('status', 'RETURNED')
                 ->sum('amount');
 
-            $totalStock = $stockFromGudang + $stockSold + $stockReturned;
+            $totalStock = $stockFromGudang - $stockSold + $stockReturned;
             $checkStockBakpia = $totalStock - $item["amount"];
 
+            Log::info($checkStockBakpia . ' | IN ' . $stockFromGudang . ' | SOLD ' . $stockSold . ' | RETN ' . $stockReturned . " || " . $item["amount"]);
+
             if ($checkStockBakpia > 0) {
-                
+
                 SparepartStock::create([
-                    'id_warehouse' => '1',//$res["id_warehouse"], //$res['id_outlet'], //lol
+                    'id_warehouse' => '1', //$res["id_warehouse"], //$res['id_outlet'], //lol
                     'id_sparepart' => $item["id_sparepart"],
                     'id_transaction' => $data['id_report'],
                     'status' => 'STOCK_SOLD',
-                    'amount' =>  $item["sent_stock"],
+                    'amount' =>  $item["amount"],
                     'description' => $data["working_description"],
-                    'stock_record_date' => $now(),
+                    'stock_record_date' => $now,
                 ]);
             } else {
                 //failed

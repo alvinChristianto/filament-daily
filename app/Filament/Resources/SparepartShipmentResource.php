@@ -113,7 +113,12 @@ class SparepartShipmentResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('status')
+                    ->label('status pengiriman')
+                    ->options([
+                        'SENT' => 'SENT',
+                        'RETURNED' => 'RETURNED',
+                    ]),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

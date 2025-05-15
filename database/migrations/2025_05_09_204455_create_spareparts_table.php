@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name', length: 100);
             $table->unsignedInteger('price');
+            $table->unsignedInteger('sell_price')->nullable();
             $table->string('unit');
             $table->unsignedInteger('initial_amount');
             $table->string('origin_from')->nullable();

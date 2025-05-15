@@ -20,9 +20,11 @@ use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AcWorkingReportResource extends Resource
@@ -60,10 +62,11 @@ class AcWorkingReportResource extends Resource
                 ->where('status', 'RETURNED')
                 ->sum('amount');
 
-            $totalStock = $stockFromGudang + $stockSold + $stockReturned;
+            $totalStock = $stockFromGudang - $stockSold - $stockReturned;
             $checkStockBakpia = $totalStock - $amountPer;
 
-            Log::info($checkStockBakpia);
+            Log::info($checkStockBakpia . ' | IN ' . $stockFromGudang . ' | SOLD ' . $stockSold . ' | RETN ' . $stockReturned . " || " . $amountPer);
+
             if ($checkStockBakpia < 0) {
                 Notification::make()
                     ->title('Error') // Set the title of the notification
@@ -75,7 +78,7 @@ class AcWorkingReportResource extends Resource
 
                 return [0, $totalStock, $checkStockBakpia];
             }
-            $price = Sparepart::where('id', $idSparepart)->value('price');
+            $price = Sparepart::where('id', $idSparepart)->value('sell_price');
 
             $price = $price * $amountPer;
 
@@ -112,9 +115,14 @@ class AcWorkingReportResource extends Resource
                             ->label('Alamat Service'),
                         Forms\Components\DateTimePicker::make('in_time')
                             ->label('Jam mulai')
+                            ->seconds(false)
+                            ->timezone('Asia/Jakarta')
                             ->required(),
                         Forms\Components\DateTimePicker::make('out_time')
                             ->label('Jam selesai')
+                            ->after('in_time')
+                            ->seconds(false)
+                            ->timezone('Asia/Jakarta')
                             ->required(),
                         Forms\Components\Textarea::make('working_description')
                             ->label('Catatan Pekerjaan'),
@@ -133,6 +141,7 @@ class AcWorkingReportResource extends Resource
                                     ->options(function (Get $get) {
                                         return Sparepart::pluck('name', 'id');
                                     })
+                                    ->searchable()
                                     ->required(),
                                 Forms\Components\TextInput::make('amount')
                                     ->label('jumlah satuan')
@@ -177,7 +186,7 @@ class AcWorkingReportResource extends Resource
                 Fieldset::make('Data Pembayaran')
                     ->schema([
                         Forms\Components\TextInput::make('discount')
-                            ->label('discount nominal')
+                            ->label('nominal diskon')
                             ->default(0)
                             ->numeric(),
 
@@ -288,8 +297,15 @@ class AcWorkingReportResource extends Resource
                 Tables\Columns\TextColumn::make('total_price')
                     ->label('total biaya')
                     ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('status'),
+                    ->sortable()
+                    ->summarize(Sum::make()),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'SUCCESS' => 'success',
+                        'OTHER' => 'info',
+                        'FAILED' => 'danger',
+                    }),
                 Tables\Columns\TextColumn::make('next_service_date')
                     ->label('tgl service selanjutnya')
                     ->date()

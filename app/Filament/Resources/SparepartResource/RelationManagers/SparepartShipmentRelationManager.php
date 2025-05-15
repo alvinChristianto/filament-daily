@@ -62,9 +62,14 @@ class SparepartShipmentRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('warehouse.name')
                     ->label('outlet')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('sparepart.name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'INITIAL' => 'info',
+                        'SENT' => 'success',
+                        'ADD' => 'success',
+                        'RETURNED' => 'danger',
+                    }),
                 Tables\Columns\TextColumn::make('remaining_stock')
                     ->label('stock awal')
                     ->numeric()
