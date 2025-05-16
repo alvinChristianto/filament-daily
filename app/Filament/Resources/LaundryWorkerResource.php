@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AcCustomerResource\Pages;
-use App\Filament\Resources\AcCustomerResource\RelationManagers;
-use App\Models\AcCustomer;
+use App\Filament\Resources\LaundryWorkerResource\Pages;
+use App\Filament\Resources\LaundryWorkerResource\RelationManagers;
+use App\Models\LaundryWorker;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,22 +13,24 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AcCustomerResource extends Resource
+class LaundryWorkerResource extends Resource
 {
-    protected static ?string $model = AcCustomer::class;
+    protected static ?string $model = LaundryWorker::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationLabel = 'Data Klien/Customer';
-    protected static ?string $navigationGroup = 'Master';
+    protected static ?string $navigationLabel = 'Pekerja Laundry';
+    protected static ?string $navigationGroup = 'Laundry';
+    protected static ?string $modelLabel = 'Pekerja Laundry';
 
-    protected static ?string $modelLabel = 'Data Klien/Customer';
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->label('nama Pekerja')
                     ->maxLength(100)
                     ->columnSpanFull(),
                 Forms\Components\Select::make('gender')
@@ -37,20 +39,15 @@ class AcCustomerResource extends Resource
                         'P' => 'Perempuan',
                         '-' => '-',
                     ]),
-                Forms\Components\Select::make('category')
-                    ->options([
-                        'PERSON' => 'PERSON',
-                        'PT' => 'PT',
-                        'OTHER' => 'OTHER',
-                    ]),
                 Forms\Components\TextInput::make('phone_number')
+                    ->label('No Telepon')
                     ->required()
                     ->tel(),
                 Forms\Components\TextInput::make('email')
                     ->label('email'),
                 Forms\Components\Textarea::make('address')
+                    ->label('Alamat')
                     ->required(),
-
             ]);
     }
 
@@ -59,10 +56,8 @@ class AcCustomerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label('Nama Klien')
+                    ->label('Nama pekerja')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('category')
-                    ->label('Jenis Klien'),
                 Tables\Columns\TextColumn::make('phone_number')
                     ->label('No. telpon'),
                 Tables\Columns\TextColumn::make('address')
@@ -72,6 +67,7 @@ class AcCustomerResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -91,9 +87,9 @@ class AcCustomerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAcCustomers::route('/'),
-            'create' => Pages\CreateAcCustomer::route('/create'),
-            'edit' => Pages\EditAcCustomer::route('/{record}/edit'),
+            'index' => Pages\ListLaundryWorkers::route('/'),
+            'create' => Pages\CreateLaundryWorker::route('/create'),
+            'edit' => Pages\EditLaundryWorker::route('/{record}/edit'),
         ];
     }
 }

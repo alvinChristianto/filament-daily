@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\AcCustomerResource\Pages;
-use App\Filament\Resources\AcCustomerResource\RelationManagers;
-use App\Models\AcCustomer;
+use App\Filament\Resources\LaundryCustomerResource\Pages;
+use App\Filament\Resources\LaundryCustomerResource\RelationManagers;
+use App\Models\LaundryCustomer;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,16 +13,16 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class AcCustomerResource extends Resource
+class LaundryCustomerResource extends Resource
 {
-    protected static ?string $model = AcCustomer::class;
+    protected static ?string $model = LaundryCustomer::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationLabel = 'Data Klien/Customer';
-    protected static ?string $navigationGroup = 'Master';
+    protected static ?string $navigationLabel = 'Data Klien/Customer Laundry';
+    protected static ?string $navigationGroup = 'Laundry';
+    protected static ?string $modelLabel = 'Data Klien/Customer Laundry';
 
-    protected static ?string $modelLabel = 'Data Klien/Customer';
     public static function form(Form $form): Form
     {
         return $form
@@ -50,7 +50,6 @@ class AcCustomerResource extends Resource
                     ->label('email'),
                 Forms\Components\Textarea::make('address')
                     ->required(),
-
             ]);
     }
 
@@ -72,6 +71,7 @@ class AcCustomerResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -91,9 +91,9 @@ class AcCustomerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAcCustomers::route('/'),
-            'create' => Pages\CreateAcCustomer::route('/create'),
-            'edit' => Pages\EditAcCustomer::route('/{record}/edit'),
+            'index' => Pages\ListLaundryCustomers::route('/'),
+            'create' => Pages\CreateLaundryCustomer::route('/create'),
+            'edit' => Pages\EditLaundryCustomer::route('/{record}/edit'),
         ];
     }
 }

@@ -19,7 +19,10 @@ class DatabaseSeeder extends Seeder
             PaymentSeeder::class,
             AcWorkingReportSeeder::class,
             SparepartSeeder::class,
-            SparepartStockSeeder::class
+            SparepartStockSeeder::class,
+            LaundryPacketSeeder::class,
+            LaundryWorkerSeeder::class,
+            LaundryCustomerSeeder::class
 
         ]);
     }
