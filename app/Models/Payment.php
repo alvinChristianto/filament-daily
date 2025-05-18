@@ -11,4 +11,9 @@ class Payment extends Model
     {
         return $this->hasMany(AcWorkingReport::class, 'id');
     }
+
+    public function laundryTransaction(): HasMany
+    {
+        return $this->hasMany(LaundryTransaction::class, 'id');
+    }
 }

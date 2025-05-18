@@ -19,9 +19,9 @@ class LaundryCustomerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationLabel = 'Data Klien/Customer Laundry';
+    protected static ?string $navigationLabel = 'Customer Laundry';
     protected static ?string $navigationGroup = 'Laundry';
-    protected static ?string $modelLabel = 'Data Klien/Customer Laundry';
+    protected static ?string $modelLabel = 'Customer Laundry';
 
     public static function form(Form $form): Form
     {
