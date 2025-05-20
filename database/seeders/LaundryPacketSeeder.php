@@ -43,13 +43,7 @@ class LaundryPacketSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            [
-                'name' => 'KILAT',
-                'alias' => 'KILAT',
-                'base_price' => '500',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
+           
         ]);
     }
 }

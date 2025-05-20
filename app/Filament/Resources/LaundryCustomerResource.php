@@ -28,6 +28,7 @@ class LaundryCustomerResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->label('Nama Pelanggan')
                     ->required()
                     ->maxLength(100)
                     ->columnSpanFull(),
@@ -38,12 +39,14 @@ class LaundryCustomerResource extends Resource
                         '-' => '-',
                     ]),
                 Forms\Components\Select::make('category')
+                    ->label('Kategory')
                     ->options([
                         'PERSON' => 'PERSON',
                         'PT' => 'PT',
                         'OTHER' => 'OTHER',
                     ]),
                 Forms\Components\TextInput::make('phone_number')
+                    ->label('no.Telp')
                     ->required()
                     ->tel(),
                 Forms\Components\TextInput::make('email')

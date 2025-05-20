@@ -28,6 +28,7 @@ class AcCustomerResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                ->label('nama klien')
                     ->required()
                     ->maxLength(100)
                     ->columnSpanFull(),
@@ -38,18 +39,21 @@ class AcCustomerResource extends Resource
                         '-' => '-',
                     ]),
                 Forms\Components\Select::make('category')
+                ->label('kategori')
                     ->options([
                         'PERSON' => 'PERSON',
                         'PT' => 'PT',
                         'OTHER' => 'OTHER',
                     ]),
                 Forms\Components\TextInput::make('phone_number')
+                ->label('no. telepon')
                     ->required()
                     ->tel(),
                 Forms\Components\TextInput::make('email')
                     ->label('email'),
                 Forms\Components\Textarea::make('address')
-                    ->required(),
+                    ->required()
+                    ->label('Alamat'),
 
             ]);
     }

@@ -60,6 +60,7 @@ class LaundryTransactionResource extends Resource
                     ->required(),
 
                 Fieldset::make('Data Pelanggan dan Pembayaran')
+
                     ->schema([
 
                         Forms\Components\TextInput::make('kg_amount')
@@ -154,20 +155,6 @@ class LaundryTransactionResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id_transaction')
                     ->label('Id'),
-                Tables\Columns\TextColumn::make('customer.name')
-                    ->label('Klien')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('payment.name')
-                    ->label('metode bayar'),
-                Tables\Columns\TextColumn::make('total_price')
-                    ->label('total biaya')
-                    ->numeric()
-                    ->sortable()
-                    ->summarize(Sum::make()),
-                Tables\Columns\TextColumn::make('finish_date')
-                    ->label('Tgl Selesai')
-                    ->date()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
@@ -175,6 +162,23 @@ class LaundryTransactionResource extends Resource
                         'ONPROGRESS' => 'info',
                         'CANCEL' => 'danger',
                     }),
+                Tables\Columns\TextColumn::make('customer.name')
+                    ->label('Klien')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('packet.alias')
+                    ->label('Paket'),
+                Tables\Columns\TextColumn::make('payment.name')
+                    ->label('metode bayar'),
+                Tables\Columns\TextColumn::make('total_price')
+                    ->label('total biaya')
+                    ->numeric()
+                    ->money('idr')
+                    ->sortable()
+                    ->summarize(Sum::make()),
+                Tables\Columns\TextColumn::make('finish_date')
+                    ->label('Tgl Selesai')
+                    ->date()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

@@ -41,6 +41,7 @@ class LaundryPacketResource extends Resource
                     ->numeric()
                     ->prefix('Rp'),
                 Forms\Components\Textarea::make('description')
+                    ->label('Penjelasan')
                     ->required(),
 
             ]);
@@ -51,11 +52,12 @@ class LaundryPacketResource extends Resource
         return $table
             ->columns([
 
-                Tables\Columns\TextColumn::make('alias')
-                    ->label('Nama alias')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama paket')
+                    ->searchable(),
+
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Penjelasan')
                     ->searchable(),
                 //
             ])
