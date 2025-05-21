@@ -16,6 +16,7 @@ return new class extends Migration
 
             $table->foreignId('id_customer')->references('id')->on('ac_customers');
             $table->foreignId('id_payment')->references('id')->on('payments');
+            $table->foreignId('id_worker')->references('id')->on('ac_workers');
 
             $table->string('title', length: 100);
             $table->string('address', length: 100)->nullable();

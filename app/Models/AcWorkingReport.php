@@ -37,4 +37,10 @@ class AcWorkingReport extends Model
     {
         return $this->belongsTo(AcCustomer::class, 'id_customer');
     }
+
+    public function worker(): BelongsTo
+    {
+        return $this->belongsTo(AcWorker::class, 'id_worker');
+    }
+    
 }

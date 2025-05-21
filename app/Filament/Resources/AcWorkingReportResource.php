@@ -262,6 +262,42 @@ class AcWorkingReportResource extends Resource
                             ])
                     ])
                     ->required(),
+                Select::make('id_worker')
+                    ->label('data pekerja')
+                    ->relationship('worker', 'name')
+                    ->searchable()
+                    ->createOptionForm([
+                        Fieldset::make('Label')
+                            ->schema([
+                                Forms\Components\TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(100),
+                                Forms\Components\TextInput::make('email')
+                                    ->label('Email address')
+                                    ->email()
+                                    ->maxLength(255),
+                                Forms\Components\TextInput::make('phone_number')
+                                    ->label('Phone number')
+                                    ->tel()
+                                    ->required(),
+
+                               
+                                Forms\Components\Select::make('gender')
+                                    ->options([
+                                        'L' => 'Laki-laki',
+                                        'P' => 'Perempuan',
+                                        '-' => 'Lainnya'
+                                    ])
+                                    ->required(),
+                                Forms\Components\Textarea::make('address')
+                                    ->rows(2)
+                                    ->cols(10)
+                                    ->columnSpan('full'),
+
+
+                            ])
+                    ])
+                    ->required(),
 
                 Forms\Components\DatePicker::make('next_service_date')
                     ->label('Tanggal Service Berikutnya')
@@ -348,8 +384,8 @@ class AcWorkingReportResource extends Resource
                     ->form([
                         DatePicker::make('Pengingat Service dari'),
                     ])
-                     ->indicateUsing(function (array $data): ?string {
-                        if (!$data['Pengingat Service dari'] ) {
+                    ->indicateUsing(function (array $data): ?string {
+                        if (!$data['Pengingat Service dari']) {
                             return null;
                         }
                         $indicatorFrom = 'reminder service dari ' . Carbon::parse($data['Pengingat Service dari'])->toFormattedDateString();
@@ -361,7 +397,6 @@ class AcWorkingReportResource extends Resource
                                 $data['Pengingat Service dari'],
                                 fn (Builder $query, $date): Builder => $query->whereDate('next_service_date', '>=', $date),
                             );
-                            
                     }),
                 Tables\Filters\SelectFilter::make('id_payment')
                     ->label('Payment')
