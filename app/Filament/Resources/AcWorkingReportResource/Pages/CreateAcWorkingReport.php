@@ -55,7 +55,7 @@ class CreateAcWorkingReport extends CreateRecord
                     'id_warehouse' => '1', //$res["id_warehouse"], //$res['id_outlet'], //lol
                     'id_sparepart' => $item["id_sparepart"],
                     'id_transaction' => $data['id_report'],
-                    'status' => 'STOCK_SOLD',
+                    'status' => 'STOCK_SOLD_AC',
                     'amount' =>  $item["amount"],
                     'description' => $data["working_description"],
                     'stock_record_date' => $now,

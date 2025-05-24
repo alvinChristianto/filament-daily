@@ -7,10 +7,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sparepart extends Model
 {
-    public function sparepartShipment(): HasMany
-    {
-        return $this->hasMany(SparepartShipment::class, 'id_sparepart');
-    }
+    // public function sparepartShipment(): HasMany
+    // {
+    //     return $this->hasMany(SparepartShipment::class, 'id_sparepart');
+    // }
     
     public function sparepartStock(): HasMany
     {

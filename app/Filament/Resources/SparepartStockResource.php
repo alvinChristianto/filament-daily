@@ -45,7 +45,8 @@ class SparepartStockResource extends Resource
                 Forms\Components\Select::make('status')
                     ->options([
                         'STOCK_IN' => 'STOCK_IN',
-                        'STOCK_SOLD' => 'STOCK_SOLD',
+                        'STOCK_SOLD_MAINSTORE' => 'STOCK_SOLD_MAINSTORE',
+                        'STOCK_SOLD_AC' => 'STOCK_SOLD_AC',
                         'RETURNED' => 'RETURNED',
                     ])
                     ->required(),
@@ -80,7 +81,8 @@ class SparepartStockResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'STOCK_IN' => 'info',
-                        'STOCK_SOLD' => 'success',
+                        'STOCK_SOLD_MAINSTORE' => 'success',
+                        'STOCK_SOLD_AC' => 'success',
                         'RETURNED' => 'danger',
                     }),
                 Tables\Columns\TextColumn::make('amount')
@@ -104,8 +106,9 @@ class SparepartStockResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label('status stock')
                     ->options([
-                        'STOCK_IN' => 'STOCK_IN',
-                        'STOCK_SOLD' => 'STOCK_SOLD',
+                       'STOCK_IN' => 'STOCK_IN',
+                        'STOCK_SOLD_MAINSTORE' => 'STOCK_SOLD_MAINSTORE',
+                        'STOCK_SOLD_AC' => 'STOCK_SOLD_AC',
                         'RETURNED' => 'RETURNED',
                     ]),
             ])

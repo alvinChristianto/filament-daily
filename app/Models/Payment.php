@@ -16,4 +16,9 @@ class Payment extends Model
     {
         return $this->hasMany(LaundryTransaction::class, 'id');
     }
+
+    public function sparepartTransactionShipment(): HasMany
+    {
+        return $this->hasMany(SparepartShipment::class, 'id');
+    }
 }

@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('total_price')->nullable();
             $table->integer('discount')->nullable();
 
+            $table->string('nota_ac_image')->nullable();
             $table->enum('status', ['SUCCESS', 'FAILED', 'OTHER']);
             $table->dateTime('next_service_date');
 

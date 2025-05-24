@@ -19,10 +19,10 @@ class WarehouseResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
     
-    protected static ?string $navigationLabel = 'Gudang/Outlet';
-    protected static ?string $navigationGroup = 'Master';
+    protected static ?string $navigationLabel = 'Customer Sparepart';
+    protected static ?string $navigationGroup = 'Master Sparepart';
 
-    protected static ?string $modelLabel = 'Gudang/Outlet';
+    protected static ?string $modelLabel = 'Customer Sparepart';
 
     public static function form(Form $form): Form
     {

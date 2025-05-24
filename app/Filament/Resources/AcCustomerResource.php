@@ -19,10 +19,10 @@ class AcCustomerResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
-    protected static ?string $navigationLabel = 'Data Klien/Customer';
-    protected static ?string $navigationGroup = 'Master';
+    protected static ?string $navigationLabel = 'Data Klien/Customer AC';
+    protected static ?string $navigationGroup = 'Service AC';
 
-    protected static ?string $modelLabel = 'Data Klien/Customer';
+    protected static ?string $modelLabel = 'Data Klien/Customer AC';
     public static function form(Form $form): Form
     {
         return $form

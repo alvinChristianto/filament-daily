@@ -7,39 +7,41 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class WarehouseSeeder extends Seeder
+class AcWorkerSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        DB::table('warehouses')->insert([
+        DB::table('ac_workers')->insert([
             [
-                'name' => 'GUDANG UTAMA',
-                'type' => 'OTHER',
-                'phone_number' => '08999999',
+                'name' => 'Aji',
+                'gender' => 'L',
+                'email' => '',
                 'address' => 'address test',
+                'phone_number' => '08999999',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'Andri AC',
-                'type' => 'PERSON',
-                'phone_number' => '08999999',
+                'name' => 'Endra',
+                'gender' => 'L',
+                'email' => '',
                 'address' => 'address test',
+                'phone_number' => '08999999',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
-                'name' => 'Toko Samidi',
-                'type' => 'PT',
-                'phone_number' => '08999999',
+                'name' => 'Kasim',
+                'gender' => 'L',
+                'email' => '',
                 'address' => 'address test',
+                'phone_number' => '08999999',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-
         ]);
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('warehouses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->enum('type', ['GUDANG', 'LAUNDRY', 'OTHER']);
+            $table->enum('type', ['PERSON', 'PT', 'OTHER']);
             $table->string('phone_number', length: 20)->nullable();
             $table->string('address')->nullable();
             

@@ -8,6 +8,7 @@ use App\Models\Sparepart;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,19 +35,38 @@ class SparepartResource extends Resource
                 Forms\Components\TextInput::make('price')
                     ->label('harga beli')
                     ->required()
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->numeric()
                     ->prefix('Rp'),
                 Forms\Components\TextInput::make('sell_price')
                     ->label('harga jual')
                     ->required()
+                    ->mask(RawJs::make('$money($input)'))
+                    ->stripCharacters(',')
                     ->numeric()
                     ->prefix('Rp'),
                 Forms\Components\TextInput::make('origin_from')
                     ->label('dibeli dari')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('unit')
+                Forms\Components\Select::make('unit')
                     ->label('satuan')
+                    ->options([
+                        'pieces' => 'pieces',
+                        'unit' => 'unit',
+                        'buah' => 'buah',
+                        'set' => 'set',
+                        'potong' => 'potong',
+                        'meter' => 'meter',
+                        'kg' => 'kg',
+                        'gram' => 'gram',
+                        'roll' => 'roll',
+                        'liter' => 'liter',
+                        'galon' => 'galon',
+                        'ekor' => 'ekor',
+                        'kubik' => 'kubik',
+                    ])
                     ->required(),
                 Forms\Components\TextInput::make('initial_amount')
                     ->required(),
@@ -108,7 +128,7 @@ class SparepartResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\SparepartShipmentRelationManager::class,
+            // RelationManagers\SparepartShipmentRelationManager::class,
             RelationManagers\SparepartStocksRelationManager::class,
         ];
     }

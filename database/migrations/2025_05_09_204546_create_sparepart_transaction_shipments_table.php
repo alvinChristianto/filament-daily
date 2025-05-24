@@ -11,19 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('laundry_transactions', function (Blueprint $table) {
+        Schema::create('sparepart_transaction_shipments', function (Blueprint $table) {
             $table->string('id_transaction')->primary();
-            
-            $table->foreignId('id_customer')->references('id')->on('laundry_customers');
-            $table->foreignId('id_payment')->references('id')->on('payments');
-            $table->foreignId('id_packet')->references('id')->on('laundry_packets');
 
-            $table->decimal('kg_amount', 8, 2)->nullable(); //
+            $table->foreignId('id_warehouse')->references('id')->on('warehouses');
+            $table->foreignId('id_payment')->references('id')->on('payments');
+
+            $table->json('transaction_detail')->nullable();
+
             $table->integer('total_price')->nullable();
             $table->integer('discount')->nullable();
-            $table->string('nota_laundry_image')->nullable();
-            $table->enum('status', ['ONPROGRESS', 'PAID', 'CANCEL']);
-            $table->dateTime('finish_date');
+            $table->text('description')->nullable();
+
+            $table->string('payment_image')->nullable();
+            $table->enum('status', ['SENT', 'RETURNED', 'INITIAL', 'ADD']);
+            $table->dateTime('transaction_date');
 
             $table->timestamps();
         });
@@ -34,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('laundry_transactions');
+        Schema::dropIfExists('sparepart_transaction_shipments');
     }
 };

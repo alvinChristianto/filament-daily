@@ -40,7 +40,8 @@ class SparepartStocksRelationManager extends RelationManager
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'STOCK_IN' => 'info',
-                        'STOCK_SOLD' => 'success',
+                        'STOCK_SOLD_MAINSTORE' => 'success',
+                        'STOCK_SOLD_AC' => 'success',
                         'RETURNED' => 'danger',
                     }),
                 Tables\Columns\TextColumn::make('amount')

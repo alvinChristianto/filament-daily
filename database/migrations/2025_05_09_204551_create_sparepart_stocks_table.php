@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('id_sparepart')->references('id')->on('spareparts');
 
             $table->string('id_transaction')->nullable();
-            $table->enum('status', ['STOCK_IN', 'STOCK_SOLD', 'RETURNED']);
+            $table->enum('status', ['STOCK_IN', 'STOCK_SOLD_MAINSTORE', 'STOCK_SOLD_AC', 'RETURNED']);
             $table->integer('amount')->nullable();
             $table->text('description')->nullable();
             $table->dateTime('stock_record_date');
