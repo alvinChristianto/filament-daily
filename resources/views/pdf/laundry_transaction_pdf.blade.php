@@ -60,12 +60,12 @@
             width: 100%;
             border: 1px solid #ddd;
             margin-top: 10px;
-            background-color: #ade8f4;
+            background-color: rgb(244, 173, 191);
         }
 
         .roomrate th {
             width: 100%;
-            background-color: #ade8f4;
+            background-color: rgb(244, 173, 191);
         }
 
         .summary {
@@ -172,7 +172,7 @@
 
     <table class="signature">
         <tr>
-           
+
             <td class="signatures">
                 <p>____________________</p>
                 <p>Admin Signature</p>

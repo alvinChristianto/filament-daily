@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -19,6 +20,10 @@ class DownloadPDFController extends Controller
             ->select('sparepart_transaction_shipments.*', 'warehouses.name as customer_name', 'payments.name as payment_name')
             ->first();
         $transaction_detail = json_decode($record1->transaction_detail);
+
+        //PARSING DATE
+        $record1->created_at = Carbon::parse($record1->created_at)->format('d M Y h:i:s');
+
         // dd($record1);
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView('pdf.sparepart_shipment_pdf', compact('record1', 'transaction_detail')); // Pass the variable $record to the blade file
@@ -50,8 +55,14 @@ class DownloadPDFController extends Controller
             ->first();
         $transaction_detail = json_decode($record1->transaction_detail);
 
+        //PARSING DATE
+        $record1->next_service_date = Carbon::parse($record1->next_service_date)->format('d M Y h:i:s');
+        $record1->created_at = Carbon::parse($record1->created_at)->format('d M Y h:i:s');
+        
+        // dd($record1);
+
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadView('pdf.ac_work_report', compact('record1', 'transaction_detail')); // Pass the variable $record to the blade file
+        $pdf->loadView('pdf.ac_work_report_pdf', compact('record1', 'transaction_detail')); // Pass the variable $record to the blade file
         return $pdf->stream(); // renders the PDF in the browser
     }
 }

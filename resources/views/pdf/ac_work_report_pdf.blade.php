@@ -60,12 +60,12 @@
             width: 100%;
             border: 1px solid #ddd;
             margin-top: 10px;
-            background-color: #ade8f4;
+            background-color: rgb(133, 243, 166);
         }
 
         .roomrate th {
             width: 100%;
-            background-color: #ade8f4;
+            background-color: rgb(133, 243, 166);
         }
 
         .summary {
@@ -89,7 +89,7 @@
 <body>
 
     <table class="header">
-        <h2>INVOICE</h2>
+        <h2>INVOICE AC</h2>
         <tr>
             <th style="text-align: left;">
                 <h2>Kembar Sejati Teknik</h2>
@@ -112,7 +112,7 @@
             </th>
             <th style="text-align: left;">
                 <p>Invoice No : </p>
-                <p style="font-weight: 400; font-size: 20px; color: blue">{{ $record1->id_transaction }} ({{ $record1->transaction_date }})</p>
+                <p style="font-weight: 400; font-size: 20px; color: blue">{{ $record1->id_report }} ({{ $record1->created_at }})</p>
 
             </th>
 
@@ -143,7 +143,7 @@
                     <p style="font-weight: 400;">{{ $detail->name_sparepart }} ( ID {{ $detail->id_sparepart }})</p>
                 </th>
                 <th style="text-align: left;">
-                    <p style="font-weight: 400;">{{ $detail->sent_stock }}</p>
+                    <p style="font-weight: 400;">{{ $detail->amount }}</p>
                 </th>
                 <th style="text-align: left;">
                     <p style="font-weight: 400;">{{ $detail->price_sell_sparepart }}</p>
@@ -166,13 +166,14 @@
         <th style="text-align: left;">
             <p> Informasi tambahan</p>
             <p style="font-weight: 400;">Metode Pembayaran {{ $record1->payment_name }}</p>
+            <p style="font-weight: 400;">Service Selanjutnya pada {{ $record1->next_service_date }}</p>
         </th>
         </tr>
     </table>
 
     <table class="signature">
         <tr>
-           
+
             <td class="signatures">
                 <p>____________________</p>
                 <p>Admin Signature</p>

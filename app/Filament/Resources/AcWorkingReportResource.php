@@ -12,6 +12,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
@@ -149,8 +150,32 @@ class AcWorkingReportResource extends Resource
                                     ->options(function (Get $get) {
                                         return Sparepart::pluck('name', 'id');
                                     })
+                                    ->live()
+                                    ->afterStateUpdated(
+                                        function (Set $set, Get $get, $state) {
+                                            // $state here is the currently selected ID (e.g., '1', '2', etc.)
+                                            $selectedSparepartId = $state;
+
+                                            // You can now use $selectedSparepartId to fetch related data or update other fields.
+                                            if ($selectedSparepartId) {
+                                                $sparepart = Sparepart::find($selectedSparepartId);
+                                                if ($sparepart) {
+                                                    // Example: Set another TextInput named 'sparepart_price' with the selected sparepart's price
+                                                    $set('name_sparepart', $sparepart->name);
+                                                    $set('price_sell_sparepart', $sparepart->sell_price);
+                                                }
+                                            } else {
+                                                $set('name_sparepart', null);
+                                                $set('price_sell_sparepart', null);
+                                            }
+                                            Log::info($selectedSparepartId);
+                                        }
+                                    )
                                     ->searchable()
                                     ->required(),
+
+                                Hidden::make('name_sparepart'),
+                                Hidden::make('price_sell_sparepart'),
                                 Forms\Components\TextInput::make('amount')
                                     ->label('jumlah satuan')
                                     ->integer(),
@@ -413,6 +438,10 @@ class AcWorkingReportResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('Pdf')
+                    ->icon('heroicon-m-clipboard')
+                    ->url(fn (AcWorkingReport $record) => route('acWorkReport.report', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
