@@ -21,4 +21,9 @@ class Payment extends Model
     {
         return $this->hasMany(SparepartShipment::class, 'id');
     }
+
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(Expenses::class, 'id');
+    }
 }
