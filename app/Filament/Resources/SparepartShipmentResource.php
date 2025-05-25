@@ -23,6 +23,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Log;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class SparepartShipmentResource extends Resource
 {
@@ -228,7 +231,7 @@ class SparepartShipmentResource extends Resource
                     ->label(' Pembeli')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status'), initial
                 Tables\Columns\TextColumn::make('total_price')
                     ->label('Nominal Total')
                     ->numeric()
@@ -289,7 +292,24 @@ class SparepartShipmentResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()
+                            ->withFilename('Penjualan_sparepart')
+                            // ->askForFilename()
+                            // ->withFilename(fn ($filename) => 'prefix-' . $filename)
+                            ->withColumns([
+                                Column::make('id_transaction'),
+                                Column::make('transaction_date'),
+                                Column::make('status'),
+                                Column::make('warehouse.name'),
+                                Column::make('payment.name'),
+                                Column::make('transaction_detail'),
+                                Column::make('total_price'),
+                                Column::make('discount'),
+
+                            ]),
+                    ]),
                 ]),
             ]);
     }
