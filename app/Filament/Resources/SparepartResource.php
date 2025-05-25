@@ -13,6 +13,9 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class SparepartResource extends Resource
 {
@@ -120,7 +123,23 @@ class SparepartResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()
+                            ->withFilename('data_sparepart')
+                            // ->askForFilename()
+                            // ->withFilename(fn ($filename) => 'prefix-' . $filename)
+                            ->withColumns([
+                                Column::make('id'),
+                                Column::make('status'),
+                                Column::make('name'),
+                                Column::make('price'),
+                                Column::make('sell_price'),
+                                Column::make('initial_amount'),
+                                Column::make('origin_from'),
+
+                            ]),
+                    ]),
                 ]),
             ]);
     }

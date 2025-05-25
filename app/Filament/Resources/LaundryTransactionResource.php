@@ -22,6 +22,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Log;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class LaundryTransactionResource extends Resource
 {
@@ -242,6 +245,24 @@ class LaundryTransactionResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()
+                            ->withFilename('report_laundry')
+                            // ->askForFilename()
+                            // ->withFilename(fn ($filename) => 'prefix-' . $filename)
+                            ->withColumns([
+                                Column::make('id_transaction'),
+                                Column::make('status'),
+                                Column::make('customer.name'),
+                                Column::make('payment.name'),
+                                Column::make('packet.alias'),
+                                Column::make('kg_amount'),
+                                Column::make('total_price'),
+                                Column::make('discount'),
+                                Column::make('finish_date'),
+
+                            ]),
+                    ]),
                 ]),
             ]);
     }

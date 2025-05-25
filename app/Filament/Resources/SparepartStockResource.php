@@ -14,6 +14,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class SparepartStockResource extends Resource
 {
@@ -106,7 +109,7 @@ class SparepartStockResource extends Resource
                 Tables\Filters\SelectFilter::make('status')
                     ->label('status stock')
                     ->options([
-                       'STOCK_IN' => 'STOCK_IN',
+                        'STOCK_IN' => 'STOCK_IN',
                         'STOCK_SOLD_MAINSTORE' => 'STOCK_SOLD_MAINSTORE',
                         'STOCK_SOLD_AC' => 'STOCK_SOLD_AC',
                         'RETURNED' => 'RETURNED',
@@ -118,7 +121,23 @@ class SparepartStockResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()
+                            ->withFilename('data_sparepart')
+                            // ->askForFilename()
+                            // ->withFilename(fn ($filename) => 'prefix-' . $filename)
+                            ->withColumns([
+                                Column::make('id'),
+                                Column::make('status'),
+                                Column::make('warehouse.name'),
+                                Column::make('sparepart.name'),
+                                Column::make('id_transaction'),
+                                Column::make('amount'),
+                                Column::make('stock_record_date'),
+
+                            ]),
+                    ]),
                 ]),
             ]);
     }

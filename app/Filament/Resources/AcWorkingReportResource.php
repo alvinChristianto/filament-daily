@@ -26,6 +26,9 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class AcWorkingReportResource extends Resource
 {
@@ -409,6 +412,30 @@ class AcWorkingReportResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()
+                            ->withFilename('report_service_ac')
+                            // ->askForFilename()
+                            // ->withFilename(fn ($filename) => 'prefix-' . $filename)
+                            ->withColumns([
+                                Column::make('id_report'),
+                                Column::make('status'),
+                                Column::make('customer.name'),
+                                Column::make('payment.name'),
+                                Column::make('worker.name'),
+                                Column::make('title'),
+                                Column::make('address'),
+                                Column::make('working_description'),
+                                Column::make('in_time'),
+                                Column::make('out_time'),
+                                Column::make('transaction_detail'),
+                                Column::make('total_price'),
+                                Column::make('discount'),
+                                Column::make('created_at'),
+                                Column::make('next_service_date'),
+
+                            ]),
+                    ]),
                 ]),
             ]);
     }

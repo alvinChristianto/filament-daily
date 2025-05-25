@@ -231,7 +231,7 @@ class SparepartShipmentResource extends Resource
                     ->label(' Pembeli')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('status'), initial
+                Tables\Columns\TextColumn::make('status'),
                 Tables\Columns\TextColumn::make('total_price')
                     ->label('Nominal Total')
                     ->numeric()
