@@ -56,7 +56,7 @@ class CreateSparepartShipment extends CreateRecord
                 ->where('status', 'RETURNED')
                 ->sum('amount');
 
-            $totalStock = $stockFromGudang - $stockSoldMain + $stockSoldACService + $stockReturned;
+            $totalStock = $stockFromGudang - ($stockSoldMain + $stockSoldACService + $stockReturned);
             $checkStockBakpia = $totalStock - $item["sent_stock"];
 
             Log::info($checkStockBakpia . ' | IN ' . $stockFromGudang . ' | SOLD Gudang' . $stockSoldMain . ' SOLD Gudang ' . $stockSoldACService . ' SOLD ServiceAC ' . ' | RETN ' . $stockReturned . " || " . $item["sent_stock"]);

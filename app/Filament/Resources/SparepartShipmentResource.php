@@ -82,10 +82,14 @@ class SparepartShipmentResource extends Resource
                 ->where('status', 'STOCK_IN')
                 ->sum('amount');
 
-            $stockSold = SparepartStock::all()
-                // ->where('id_outlet', $idOutlet)
+            $stockSoldMain = SparepartStock::all()
                 ->where('id_sparepart', $idSparepart)
-                ->where('status', 'STOCK_SOLD')
+                ->where('status', 'STOCK_SOLD_MAINSTORE')
+                ->sum('amount');
+
+            $stockSoldACService = SparepartStock::all()
+                ->where('id_sparepart', $idSparepart)
+                ->where('status', 'STOCK_SOLD_AC')
                 ->sum('amount');
 
             $stockReturned = SparepartStock::all()
@@ -94,10 +98,10 @@ class SparepartShipmentResource extends Resource
                 ->where('status', 'RETURNED')
                 ->sum('amount');
 
-            $totalStock = $stockFromGudang - $stockSold - $stockReturned;
+            $totalStock = $stockFromGudang - ($stockSoldMain + $stockSoldACService + $stockReturned);
             $checkStockBakpia = $totalStock - $amountPer;
 
-            Log::info($checkStockBakpia . ' | IN ' . $stockFromGudang . ' | SOLD ' . $stockSold . ' | RETN ' . $stockReturned . " || " . $amountPer);
+            Log::info($checkStockBakpia . ' | IN ' . $stockFromGudang . ' | SOLD Gudang' . $stockSoldMain . ' SOLD Gudang ' . $stockSoldACService . ' SOLD ServiceAC ' . ' | RETN ' . $stockReturned . " || " . $amountPer);
 
             if ($checkStockBakpia < 0) {
                 Notification::make()
