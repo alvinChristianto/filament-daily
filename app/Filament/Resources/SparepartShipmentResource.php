@@ -12,6 +12,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -122,18 +123,42 @@ class SparepartShipmentResource extends Resource
                     ->schema([
                         Forms\Components\Select::make('id_sparepart')
                             ->label('nama sparepart')
-                            ->options(function (Get $get) {
-                                return Sparepart::pluck('name', 'id');
+                            ->options(function (Set $set, Get $get) {
+                                $res = Sparepart::pluck('name', 'id');
+                                return $res;
                             })
+                            ->live()
+                            ->afterStateUpdated(
+                                function (Set $set, Get $get, $state) {
+                                    // $state here is the currently selected ID (e.g., '1', '2', etc.)
+                                    $selectedSparepartId = $state;
+
+                                    // You can now use $selectedSparepartId to fetch related data or update other fields.
+                                    if ($selectedSparepartId) {
+                                        $sparepart = Sparepart::find($selectedSparepartId);
+                                        if ($sparepart) {
+                                            // Example: Set another TextInput named 'sparepart_price' with the selected sparepart's price
+                                            $set('name_sparepart', $sparepart->name);
+                                            $set('price_sell_sparepart', $sparepart->sell_price);
+                                        }
+                                    } else {
+                                        $set('name_sparepart', null);
+                                        $set('price_sell_sparepart', null);
+                                    }
+                                    Log::info($selectedSparepartId);
+                                }
+                            )
                             ->searchable()
                             ->required(),
 
+                        Hidden::make('name_sparepart'),
+                        Hidden::make('price_sell_sparepart'),
                         Forms\Components\TextInput::make('sent_stock')
                             ->label('jumlah unit dijual')
                             ->required()
                             ->numeric(),
                         Forms\Components\TextInput::make('price_per')
-                            ->label('harga per satuan')
+                            ->label('harga total barang')
                             // ->numeric()
                             // ->disabled()
                             ->dehydrated(true)
@@ -289,6 +314,10 @@ class SparepartShipmentResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('Pdf')
+                    ->icon('heroicon-m-clipboard')
+                    ->url(fn (SparepartShipment $record) => route('sparepartShipment.report', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
