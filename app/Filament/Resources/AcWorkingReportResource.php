@@ -44,7 +44,7 @@ class AcWorkingReportResource extends Resource
     public static function form(Form $form): Form
     {
 
-        function calculatePricePer($idSparepart, $amountPer)
+        function calculatePricePer_AC($idSparepart, $amountPer)
         {
 
             $price = 0;
@@ -192,7 +192,7 @@ class AcWorkingReportResource extends Resource
                                                 $amountPer = $get('amount');
                                                 $idSpareaprt = $get('id_sparepart');
 
-                                                $res =  calculatePricePer($idSpareaprt, $amountPer);
+                                                $res =  calculatePricePer_AC($idSpareaprt, $amountPer);
 
                                                 $set('price_per', $res[0]);
 
