@@ -7,8 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LaundryPacket extends Model
 {
-    public function laundryTransaction(): HasMany
-    {
-        return $this->hasMany(LaundryTransaction::class, 'id');
-    }
+    // public function laundryTransaction(): HasMany
+    // {
+    //     return $this->hasMany(LaundryTransaction::class, 'id');
+    // }
 }

@@ -16,7 +16,9 @@ class LaundryTransaction extends Model
     public $incrementing = false;
 
     // protected $casts = ['id_hotel' => 'string'];
-    protected $casts = [];
+    protected $casts = [
+        'transaction_detail' => 'json',
+    ];
     /**
      * The data type of the primary key ID.
      *
@@ -34,10 +36,10 @@ class LaundryTransaction extends Model
     {
         return $this->belongsTo(LaundryCustomer::class, 'id_customer');
     }
-    
-    public function packet(): BelongsTo
-    {
-        return $this->belongsTo(LaundryPacket::class, 'id_packet');
-    }
-    
+
+    // public function packet(): BelongsTo
+    // {
+    //     return $this->belongsTo(LaundryPacket::class, 'id_packet');
+    // }
+
 }

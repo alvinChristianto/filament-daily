@@ -19,17 +19,20 @@ class LaundryStatOverview extends BaseWidget
 
         // Menghitung pendapatan HARIAN
         $RawdailyRevenue = LaundryTransaction::query()
+            // ->where('status', 'PAID')
             ->whereDate('created_at', $today)
             ->sum('total_price');
 
         // Menghitung pendapatan BULANAN
         $RawmonthlyRevenue = LaundryTransaction::query()
+            // ->where('status', 'PAID')
             ->whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear) // Pastikan tahun juga sesuai
             ->sum('total_price');
 
         // Menghitung pendapatan TAHUNAN
         $RawyearlyRevenue = LaundryTransaction::query()
+            // ->where('status', 'PAID')
             ->whereYear('created_at', $currentYear)
             ->sum('total_price');
 

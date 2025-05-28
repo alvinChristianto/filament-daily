@@ -16,12 +16,12 @@ return new class extends Migration
             
             $table->foreignId('id_customer')->references('id')->on('laundry_customers');
             $table->foreignId('id_payment')->references('id')->on('payments');
-            $table->foreignId('id_packet')->references('id')->on('laundry_packets');
+            // $table->foreignId('id_packet')->references('id')->on('laundry_packets');
 
-            $table->decimal('kg_amount', 8, 2)->nullable(); //
+            $table->json('transaction_detail')->nullable();   //id_packet, per price, kg amount
+            
             $table->integer('total_price')->nullable();
             $table->integer('discount')->nullable();
-            $table->string('nota_laundry_image')->nullable();
             $table->enum('status', ['ONPROGRESS', 'PAID', 'CANCEL']);
             $table->dateTime('finish_date');
 

@@ -31,7 +31,6 @@ class CreateLaundryTransaction extends CreateRecord
         $transformId = "LDR_" . $year . $month . $day . $randomDigits ."_". $str;
         $data['id_transaction'] = $transformId;
 
-        // dd($data);
         return ($data);
     }
 

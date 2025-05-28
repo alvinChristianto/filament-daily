@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LaundryWorkReportResource\Pages;
 use App\Filament\Resources\LaundryWorkReportResource\RelationManagers;
+use App\Models\LaundryPacket;
 use App\Models\LaundryTransaction;
 use App\Models\LaundryWorker;
 use App\Models\LaundryWorkReport;
@@ -11,17 +12,23 @@ use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Hidden;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\Summarizers\Average;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Log;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class LaundryWorkReportResource extends Resource
 {
@@ -36,42 +43,51 @@ class LaundryWorkReportResource extends Resource
 
     public static function form(Form $form): Form
     {
-        function calculateWorkerFee($id_transc)
+        function calculatePriceTransac($id_transc)
         {
+            if (!$id_transc) {
+                return 0;
+            }
             $transctType = LaundryTransaction::where('id_transaction', $id_transc)->first();
-            $idPacket = $transctType->id_packet;
+
             $priceTransact = $transctType->total_price;
 
-            Log::info('trx ' . $id_transc . ' | ' . $idPacket . ' | ' . $priceTransact);
-            if ($idPacket == 1) {
-                return [1, 1, 1, $priceTransact];
-            } elseif ($idPacket == 2) {
-                return [1, 0, 0, $priceTransact];
-            } elseif ($idPacket == 3) {
-                return [1, 1, 0, $priceTransact];
-            } elseif ($idPacket == 4) {
-                return [0, 0, 1, $priceTransact];
-            }
-            return true;
+            return $priceTransact;
         }
 
-        function calculateWorkingprice($a, $b, $c)
+        function calculateWorkingprice($transactionDetail)
         {
-            Log::info('Working Fee ' . $a . ' | ' . $b . ' | ' . $c);
-            return $a + $b + $c;
+            $tempSumAll = 0;
+            foreach ($transactionDetail as $key => $trxDetail) {
+                // $idBakpia = $trxDetail['id_packet'];
+                // $amountBakpia = $trxDetail['amount'];
+                $fee = $trxDetail['fee'];
+                if (!$fee || !$fee === "") {
+                    Notification::make()
+                        ->title('Error') // Set the title of the notification
+                        ->body('Nilai tidak valid -> $fee ') // Set the body of the notification
+                        ->danger() // Set the type to danger (for error)
+                        ->send(); // Send the notification
+                    return 0;
+                }
+
+                $price = $fee;
+                Log::info($price);
+
+                $tempSumAll = $tempSumAll + $price;
+            }
+
+            return $tempSumAll;
         }
 
         return $form
             ->schema([
-                Hidden::make('cuci_hidden'),
-                Hidden::make('lipat_hidden'),
-                Hidden::make('setrika_hidden'),
                 Select::make('id_transaction')
                     ->label('Id transaksi laundry')
                     ->relationship(
                         'laundryTransaction',
                         'id_transaction',
-                        fn ($query) => $query->where('status', 'ONPROGRESS')
+                        fn ($query) => $query->where('status', 'PAID')
                             ->orderBy('created_at', 'desc')
                     )
                     ->searchable()
@@ -82,69 +98,40 @@ class LaundryWorkReportResource extends Resource
                         Action::make('copyCostToPrice')
                             ->icon('heroicon-m-calculator')
                             ->action(function (Set $set, Get $get, $state) {
-                                $res =  calculateWorkerFee($state);
-                                $set('cuci_hidden', $res[0]);
-                                $set('lipat_hidden', $res[1]);
-                                $set('setrika_hidden', $res[2]);
-                                $set('transaction_price', $res[3]);
+                                $res =  calculatePriceTransac($state);
+                                $set('transaction_price', $res);
                             })
                     ),
-                Fieldset::make('Cuci')
+
+                Fieldset::make('Detail Pekerjaan')
                     ->schema([
-                        Forms\Components\Select::make('cuci_worker')
-                            ->label('petugas cuci')
-                            ->options(function (Get $get) {
+                        Repeater::make('transaction_detail')
+                            ->label('Pekerjaan ')
+                            ->schema([
+                                Select::make('id_packet')
+                                    ->label('Paket yang dikerjakan')
+                                    ->options(function (Get $get) {
+                                        return LaundryPacket::pluck('name', 'id');
+                                    })
+                                    ->required(),
 
-                                return LaundryWorker::all()->pluck('name', 'name');
-                            }),
-                        Forms\Components\TextInput::make('cuci_kg_amount')
-                            ->numeric()
-                            ->suffix('Kg'),
-                        Forms\Components\TextInput::make('cuci_fee')
-                            ->numeric()
-                            ->prefix('Rp'),
-                    ])
-                    ->dehydrated(true)
-                    ->reactive()
-                    ->hidden(fn (Get $get) => !$get('cuci_hidden') ?? true), // Use a closure
+                                Forms\Components\Select::make('worker')
+                                    ->label('petugas')
+                                    ->options(function (Get $get) {
 
-                Fieldset::make('Lipat')
-                    ->schema([
-                        Forms\Components\Select::make('lipat_worker')
-                            ->label('petugas Lipat')
-                            ->options(function (Get $get) {
+                                        return LaundryWorker::all()->pluck('name', 'name');
+                                    }),
+                                Forms\Components\TextInput::make('kg_amount')
+                                    ->numeric()
+                                    ->suffix('Kg'),
+                                Forms\Components\TextInput::make('fee')
+                                    ->numeric()
+                                    ->prefix('Rp'),
 
-                                return LaundryWorker::all()->pluck('name', 'name');
-                            }),
-                        Forms\Components\TextInput::make('lipat_kg_amount')
-                            ->numeric()
-                            ->suffix('Kg'),
-                        Forms\Components\TextInput::make('lipat_fee')
-                            ->numeric()
-                            ->prefix('Rp'),
-                    ])
-                    ->dehydrated(true)
-                    ->reactive()
-                    ->hidden(fn (Get $get) => !$get('lipat_hidden') ?? true),
-
-                Fieldset::make('Setrika')
-                    ->schema([
-                        Forms\Components\Select::make('setrika_worker')
-                            ->label('petugas Setrika')
-                            ->options(function (Get $get) {
-
-                                return LaundryWorker::all()->pluck('name', 'name');
-                            }),
-                        Forms\Components\TextInput::make('setrika_kg_amount')
-                            ->numeric()
-                            ->suffix('Kg'),
-                        Forms\Components\TextInput::make('setrika_fee')
-                            ->numeric()
-                            ->prefix('Rp'),
-                    ])
-                    ->dehydrated(true)
-                    ->reactive()
-                    ->hidden(fn (Get $get) => !$get('setrika_hidden') ?? true),
+                            ])
+                            ->columnSpan('full')
+                            ->columns(3)
+                    ]),
 
                 Forms\Components\TextInput::make('transaction_price')
                     ->required()
@@ -161,11 +148,9 @@ class LaundryWorkReportResource extends Resource
                         Action::make('copyCostToPrice')
                             ->icon('heroicon-m-calculator')
                             ->action(function (Set $set, Get $get, $state) {
-                                $feeCuci = $get('cuci_fee');
-                                $feeLipat = $get('lipat_fee');
-                                $feeSetrk = $get('setrika_fee');
+                                $transaction_detail = $get('transaction_detail');
 
-                                $priceTotl =  calculateWorkingprice($feeCuci, $feeLipat, $feeSetrk);
+                                $priceTotl =  calculateWorkingprice($transaction_detail);
 
                                 $set('working_price', $priceTotl);
                             })
@@ -180,77 +165,35 @@ class LaundryWorkReportResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id_report')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('id_transaction')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'PAID' => 'success',
-                        'ONGOING' => 'info',
+                        'SUCCESS' => 'SUCCESS',
                         'CANCEL' => 'danger',
                     }),
+                Tables\Columns\TextColumn::make('worker')
+                    ->label('Nama pekerja')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('fee_pekerja')
+                    ->label('fee pekerja')
+                    ->numeric()
+                    ->money('idr'),
 
                 Tables\Columns\TextColumn::make('transaction_price')
                     ->label('Harga Klien')
                     ->numeric()
                     ->money('idr')
-                    ->sortable()
-                    ->summarize(Sum::make()),
+                    ->sortable(),
+                // ->summarize(Sum::make()),
                 Tables\Columns\TextColumn::make('working_price')
-                    ->label('Harga pengerjaan')
+                    ->label('Harga pengerjaan total')
                     ->numeric()
                     ->money('idr')
-                    ->sortable()
-                    ->summarize(Sum::make()),
-                Tables\Columns\TextColumn::make('cuci_worker')
-                    ->label('petugas cuci')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('cuci_kg_amount')
-                    ->label('Kg cuci')
-                    ->numeric()
-                    ->suffix(' kg')
-                    ->default(0)
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('cuci_fee')
-                    ->label('fee cuci')
-                    ->numeric()
-                    ->money('idr')
-                    ->default(0)
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('lipat_worker')
-                    ->label('petugas lipat')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('lipat_kg_amount')
-                    ->label('kg lipat')
-                    ->numeric()
-                    ->suffix(' kg')
-                    ->default(0)
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('lipat_fee')
-                    ->label('fee lipat')
-                    ->numeric()
-                    ->money('idr')
-                    ->default(0)
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('setrika_worker')
-                    ->label('petugas setrika')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('setrika_kg_amount')
-                    ->label('kg setrika')
-                    ->numeric()
-                    ->suffix(' kg')
-                    ->default(0)
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('setrika_fee')
-                    ->label('fee setrika')
-                    ->numeric()
-                    ->money('idr')
-                    ->default(0)
-                    ->sortable(),
+                // ->summarize(Average::make()),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -261,20 +204,8 @@ class LaundryWorkReportResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('cuci_worker')
-                    ->label('Pekerja Cuci')
-                    ->options(function (Get $get) {
-
-                        return LaundryWorker::all()->pluck('name', 'name');
-                    }),
-                Tables\Filters\SelectFilter::make('lipat_worker')
-                    ->label('Pekerja Lipat')
-                    ->options(function (Get $get) {
-
-                        return LaundryWorker::all()->pluck('name', 'name');
-                    }),
-                Tables\Filters\SelectFilter::make('setrika_worker')
-                    ->label('Pekerja Setrika')
+                Tables\Filters\SelectFilter::make('worker')
+                    ->label('Pekerja')
                     ->options(function (Get $get) {
 
                         return LaundryWorker::all()->pluck('name', 'name');
@@ -286,7 +217,24 @@ class LaundryWorkReportResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()
+                            ->withFilename('fee_pekerja_laundry')
+                            // ->askForFilename()
+                            // ->withFilename(fn ($filename) => 'prefix-' . $filename)
+                            ->withColumns([
+                                Column::make('id'),
+                                Column::make('id_transaction'),
+                                Column::make('status'),
+                                Column::make('worker'),
+                                Column::make('fee_pekerja'),
+                                Column::make('transaction_price'),
+                                Column::make('working_price'),
+                                Column::make('created_at'),
+
+                            ]),
+                    ]),
                 ]),
             ]);
     }

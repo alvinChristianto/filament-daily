@@ -11,10 +11,12 @@ use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\Summarizers\Sum;
@@ -41,34 +43,97 @@ class LaundryTransactionResource extends Resource
     public static function form(Form $form): Form
     {
 
-        function calculatePrice($id_packet, $kg_amount, $discount)
+        function calculatePricePer($id_packet, $kg_amount)
         {
             $totPrice = 0;
             $priceForPacket = LaundryPacket::where('id', $id_packet)->value('base_price');
 
+            if (!$id_packet) {
+                Notification::make()
+                    ->title('Error') // Set the title of the notification
+                    ->body('Nilai tidak valid -> $id_packet ') // Set the body of the notification
+                    ->danger() // Set the type to danger (for error)
+                    ->send(); // Send the notification
+                return 0;
+            }
 
-            $totPrice = ($priceForPacket * $kg_amount) - $discount;
+            if ($kg_amount === "") {
+                Notification::make()
+                    ->title('Error') // Set the title of the notification
+                    ->body('Nilai tidak valid -> $kg_amount ') // Set the body of the notification
+                    ->danger() // Set the type to danger (for error)
+                    ->send(); // Send the notification
+                return 0;
+            }
+            $totPrice = ($priceForPacket * $kg_amount);
 
-            Log::info($totPrice . ' | packet price ' . $priceForPacket . ' | KG ' . $kg_amount . ' | disc ' . $discount);
+            Log::info($totPrice . ' | packet price ' . $priceForPacket . ' | KG ' . $kg_amount . ' | disc ' . 0);
 
             return $totPrice;
         }
 
+        function calculatePrice($transactDetail, $discount)
+        {
+            $tempSumAll = 0;
+            foreach ($transactDetail as $key => $trxDetail) {
+                // $idBakpia = $trxDetail['id_packet'];
+                // $amountBakpia = $trxDetail['amount'];
+                $pricePer = $trxDetail['price_per'];
+
+                $price = $pricePer;
+                Log::info($price);
+
+                $tempSumAll = $tempSumAll + $price;
+            }
+
+            return $tempSumAll - $discount;
+        }
+
         return $form
             ->schema([
-                Select::make('id_packet')
-                    ->label('Paket yang dipilih')
-                    ->relationship('packet', 'name')
-                    ->preload()
-                    ->required(),
-
-                Fieldset::make('Data Pelanggan dan Pembayaran')
-
+                Forms\Components\TextInput::make('status')
+                    ->label('Status Laundry')
+                    // ->hidden(!auth()->user()->hasRole('super_admin'))
+                    ->disabled(),
+                Fieldset::make('Detail paket laundry')
                     ->schema([
+                        Repeater::make('transaction_detail')
+                            ->label('paket laundry')
+                            ->schema([
+                                Select::make('id_packet')
+                                    ->label('Paket yang dipilih')
+                                    ->options(function (Get $get) {
+                                        return LaundryPacket::pluck('name', 'id');
+                                    })
+                                    ->required(),
 
-                        Forms\Components\TextInput::make('kg_amount')
-                            ->label('Berat (Kg)')
-                            ->numeric(),
+                                Forms\Components\TextInput::make('kg_amount')
+                                    ->label('Berat (Kg)')
+                                    ->numeric(),
+                                Forms\Components\TextInput::make('price_per')
+                                    ->label('harga per satuan')
+                                    // ->numeric()
+                                    // ->disabled()
+                                    ->dehydrated(true)
+                                    ->reactive()
+                                    ->suffixAction(
+                                        Action::make('copyCostToPrice')
+                                            ->icon('heroicon-m-calculator')
+                                            ->action(function (Set $set, Get $get, $state) {
+                                                $amountPer = $get('kg_amount');
+                                                $idPacket = $get('id_packet');
+
+                                                $res =  calculatePricePer($idPacket, $amountPer);
+
+                                                $set('price_per', $res);
+                                            })
+                                    ),
+                            ])
+                            ->columnSpan('full')
+                            ->columns(3),
+                    ]),
+                Fieldset::make('Data Pelanggan dan Pembayaran')
+                    ->schema([
                         Forms\Components\TextInput::make('discount')
                             ->label('nominal diskon')
                             ->default(0)
@@ -85,11 +150,10 @@ class LaundryTransactionResource extends Resource
                                 Action::make('copyCostToPrice')
                                     ->icon('heroicon-m-calculator')
                                     ->action(function (Set $set, Get $get, $state) {
-                                        $id_packet = $get('id_packet');
-                                        $kg_amount = $get('kg_amount');
+                                        $transaction_detail = $get('transaction_detail');
                                         $discount = $get('discount');
 
-                                        $priceTotl =  calculatePrice($id_packet, $kg_amount, $discount);
+                                        $priceTotl =  calculatePrice($transaction_detail, $discount);
                                         Log::info($priceTotl);
                                         $set('total_price', $priceTotl);
                                     })
@@ -144,7 +208,7 @@ class LaundryTransactionResource extends Resource
                             ->required(),
 
                     ])
-                    ->columns(3),
+                    ->columns(2),
                 Forms\Components\DateTimePicker::make('finish_date')
                     ->label('Tanggal Selesai ')
                     ->seconds(false)
@@ -168,8 +232,6 @@ class LaundryTransactionResource extends Resource
                 Tables\Columns\TextColumn::make('customer.name')
                     ->label('Klien')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('packet.alias')
-                    ->label('Paket'),
                 Tables\Columns\TextColumn::make('payment.name')
                     ->label('metode bayar'),
                 Tables\Columns\TextColumn::make('total_price')
@@ -255,8 +317,7 @@ class LaundryTransactionResource extends Resource
                                 Column::make('status'),
                                 Column::make('customer.name'),
                                 Column::make('payment.name'),
-                                Column::make('packet.alias'),
-                                Column::make('kg_amount'),
+                                Column::make('transaction_detail'),
                                 Column::make('total_price'),
                                 Column::make('discount'),
                                 Column::make('finish_date'),
