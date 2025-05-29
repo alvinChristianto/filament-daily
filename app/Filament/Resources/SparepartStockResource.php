@@ -48,8 +48,8 @@ class SparepartStockResource extends Resource
                 Forms\Components\Select::make('status')
                     ->options([
                         'STOCK_IN' => 'STOCK_IN',
-                        'STOCK_SOLD_MAINSTORE' => 'STOCK_TERJUAL_GUDANG',
-                        'STOCK_SOLD_AC' => 'STOCK_TERJUAL_AC',
+                        'STOCK_SOLD_MAINSTORE' => 'STOCK_SOLD_MAINSTORE',
+                        'STOCK_SOLD_AC' => 'STOCK_SOLD_AC',
                         'RETURNED' => 'RETURNED',
                     ])
                     ->required(),
@@ -110,8 +110,8 @@ class SparepartStockResource extends Resource
                     ->label('status stock')
                     ->options([
                         'STOCK_IN' => 'STOCK_IN',
-                        'STOCK_SOLD_MAINSTORE' => 'STOCK_TERJUAL_GUDANG',
-                        'STOCK_SOLD_AC' => 'STOCK_TERJUAL_AC',
+                        'STOCK_SOLD_MAINSTORE' => 'STOCK_SOLD_MAINSTORE',
+                        'STOCK_SOLD_AC' => 'STOCK_SOLD_AC',
                         'RETURNED' => 'RETURNED',
                     ]),
             ])
