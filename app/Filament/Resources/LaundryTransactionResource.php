@@ -11,6 +11,7 @@ use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
@@ -105,8 +106,32 @@ class LaundryTransactionResource extends Resource
                                     ->options(function (Get $get) {
                                         return LaundryPacket::pluck('name', 'id');
                                     })
+                                    ->live()
+                                    ->afterStateUpdated(
+                                        function (Set $set, Get $get, $state) {
+                                            // $state here is the currently selected ID (e.g., '1', '2', etc.)
+                                            $selectedPacketId = $state;
+
+                                            // You can now use $selectedPacketId to fetch related data or update other fields.
+                                            if ($selectedPacketId) {
+                                                $sparepart = LaundryPacket::find($selectedPacketId);
+                                                if ($sparepart) {
+                                                    // Example: Set another TextInput named 'sparepart_price' with the selected sparepart's price
+                                                    $set('name_packet', $sparepart->name);
+                                                    $set('price_packet', $sparepart->base_price);
+                                                }
+                                            } else {
+                                                $set('name_sparepart', null);
+                                                $set('price_sell_sparepart', null);
+                                            }
+                                            Log::info($selectedPacketId);
+                                        }
+                                    )
+                                    ->searchable()
                                     ->required(),
 
+                                Hidden::make('name_packet'),
+                                Hidden::make('price_packet'),
                                 Forms\Components\TextInput::make('kg_amount')
                                     ->label('Berat (Kg)')
                                     ->numeric(),
@@ -128,6 +153,7 @@ class LaundryTransactionResource extends Resource
                                                 $set('price_per', $res);
                                             })
                                     ),
+
                             ])
                             ->columnSpan('full')
                             ->columns(3),
@@ -303,6 +329,10 @@ class LaundryTransactionResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('Pdf')
+                    ->icon('heroicon-m-clipboard')
+                    ->url(fn (LaundryTransaction $record) => route('laundryTransaction.report', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

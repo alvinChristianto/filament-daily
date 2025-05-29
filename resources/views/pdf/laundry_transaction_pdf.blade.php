@@ -92,7 +92,7 @@
         <h2>INVOICE</h2>
         <tr>
             <th style="text-align: left;">
-                <h2>Kembar Sejati Teknik</h2>
+                <h2>Laundry Kembar</h2>
                 <p>Jl. Merpati No.17, Nglarang Lor, Sidoarum, Kec. Godean, Kabupaten Sleman, DIY </p>
 
                 <p>No. Telp : 0813-9299-5755</p>
@@ -112,7 +112,7 @@
             </th>
             <th style="text-align: left;">
                 <p>Invoice No : </p>
-                <p style="font-weight: 400; font-size: 20px; color: blue">{{ $record1->id_transaction }} ({{ $record1->transaction_date }})</p>
+                <p style="font-weight: 400; font-size: 20px; color: blue">{{ $record1->id_transaction }} ({{ $record1->created_at }})</p>
 
             </th>
 
@@ -123,10 +123,10 @@
         <thead>
             <tr>
                 <th style="text-align: left;">
-                    <p>Sparepart</p>
+                    <p>Paket</p>
                 </th>
                 <th style="text-align: left;">
-                    <p>Qty</p>
+                    <p>Qty (kg)</p>
                 </th>
                 <th style="text-align: left;">
                     <p>Rate</p>
@@ -140,13 +140,13 @@
             @foreach ($transaction_detail as $detail)
             <tr>
                 <th style="text-align: left;">
-                    <p style="font-weight: 400;">{{ $detail->name_sparepart }} ( ID {{ $detail->id_sparepart }})</p>
+                    <p style="font-weight: 400;">{{ $detail->name_packet }} ( ID {{ $detail->id_packet }})</p>
                 </th>
                 <th style="text-align: left;">
-                    <p style="font-weight: 400;">{{ $detail->sent_stock }}</p>
+                    <p style="font-weight: 400;">{{ $detail->kg_amount }}</p>
                 </th>
                 <th style="text-align: left;">
-                    <p style="font-weight: 400;">{{ $detail->price_sell_sparepart }}</p>
+                    <p style="font-weight: 400;">Rp {{ $detail->price_packet }}</p>
                 </th>
                 <th style="text-align: left;">
                     <p>Rp {{ $detail->price_per }}</p>

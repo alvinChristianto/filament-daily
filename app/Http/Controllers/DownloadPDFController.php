@@ -36,9 +36,12 @@ class DownloadPDFController extends Controller
             ->join('laundry_customers', 'laundry_transactions.id_customer', '=', 'laundry_customers.id')
             ->join('payments', 'laundry_transactions.id_payment', '=', 'payments.id')
             ->where('laundry_transactions.id_transaction', $id)
-            ->select('laundry_transactions.*', 'ac_customers.name as customer_name', 'payments.name as payment_name')
+            ->select('laundry_transactions.*', 'laundry_customers.name as customer_name', 'payments.name as payment_name')
             ->first();
-        // $transaction_detail = json_decode($record1->transaction_detail);
+        $transaction_detail = json_decode($record1->transaction_detail);
+        
+        //PARSING DATE
+        $record1->created_at = Carbon::parse($record1->created_at)->format('d M Y h:i:s');
 
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadView('pdf.laundry_transaction_pdf', compact('record1', 'transaction_detail')); // Pass the variable $record to the blade file
@@ -58,7 +61,7 @@ class DownloadPDFController extends Controller
         //PARSING DATE
         $record1->next_service_date = Carbon::parse($record1->next_service_date)->format('d M Y h:i:s');
         $record1->created_at = Carbon::parse($record1->created_at)->format('d M Y h:i:s');
-        
+
         // dd($record1);
 
         $pdf = App::make('dompdf.wrapper');
