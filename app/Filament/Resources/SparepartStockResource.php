@@ -52,6 +52,7 @@ class SparepartStockResource extends Resource
                         'STOCK_SOLD_AC' => 'STOCK_SOLD_AC',
                         'RETURNED' => 'RETURNED',
                     ])
+                    ->helperText(str('**STOCK_IN**: Stock masuk ke Gudang, <br> **STOCK_SOLD_MAINSTORE**: Stock yang keluar karena dijual, <br> **STOCK_SOLD_AC**: Stock yang keluar karena pengerjaan AC, <br> **RETURNED**: Stock yang kembali ke Gudang ')->inlineMarkdown()->toHtmlString())
                     ->required(),
                 Forms\Components\TextInput::make('amount')
                     ->label('Jumlah sparepart')
