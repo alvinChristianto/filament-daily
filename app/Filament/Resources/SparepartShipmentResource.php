@@ -245,7 +245,8 @@ class SparepartShipmentResource extends Resource
                             ->label('Catatan Penjualan')
                             ->columnSpanFull(),
                     ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function table(Table $table): Table

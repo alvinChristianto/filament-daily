@@ -355,7 +355,8 @@ class LaundryTransactionResource extends Resource
                             ]),
                     ]),
                 ]),
-            ]);
+            ])
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

@@ -34,9 +34,9 @@ class SparepartStatOverview extends BaseWidget
             ->whereYear('created_at', $currentYear)
             ->sum('total_price');
 
-        $dailyRevenue = 'Rp ' . number_format($RawdailyRevenue, 2, '.', '');
-        $monthlyRevenue = 'Rp ' . number_format($RawmonthlyRevenue, 2, '.', '');
-        $yearlyRevenue = 'Rp ' . number_format($RawyearlyRevenue, 2, '.', '');
+        $dailyRevenue = 'Rp ' . number_format($RawdailyRevenue, 2, ',', '.');
+        $monthlyRevenue = 'Rp ' . number_format($RawmonthlyRevenue, 2, ',', '.');
+        $yearlyRevenue = 'Rp ' . number_format($RawyearlyRevenue, 2, ',', '.');
 
         return [
             Stat::make('Pend. JUAL SPAREPART', $dailyRevenue)
