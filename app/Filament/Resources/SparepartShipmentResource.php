@@ -225,6 +225,26 @@ class SparepartShipmentResource extends Resource
                             ->label('Pembeli/Toko Tujuan')
                             ->relationship('warehouse', 'name')
                             ->searchable()
+                            ->createOptionForm([
+                                Fieldset::make('Buat data pelanggan laundry')
+                                    ->schema([
+                                        Forms\Components\TextInput::make('name')
+                                            ->required()
+                                            ->maxLength(255),
+                                        Forms\Components\Select::make('type')
+                                            ->options([
+                                                'GUDANG' => 'GUDANG',
+                                                'LAUNDRY' => 'LAUNDRY',
+                                                'OTHER' => 'LAIN-LAIN',
+                                            ]),
+                                        Forms\Components\TextInput::make('phone_number')
+                                            ->tel()
+                                            ->maxLength(20),
+                                        Forms\Components\TextInput::make('address')
+                                            ->required()
+                                            ->maxLength(255),
+                                    ])
+                            ])
                             ->required(),
                         Forms\Components\Select::make('id_payment')
                             ->label('metode pembayaran')
