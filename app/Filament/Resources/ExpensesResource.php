@@ -36,75 +36,76 @@ class ExpensesResource extends Resource
     protected static ?string $modelLabel = 'Pembiayaan';
     public static function form(Form $form): Form
     {
+        $typeOfExpenses = [
+            'BIAYA_LAUNDRY' => 'BIAYA_LAUNDRY',
+            'BIAYA_SPAREPART' => 'BIAYA_SPAREPART',
+            'MAKAN_SERVICE_AC' => 'MAKAN_SERVICE_AC',
+            'LAIN-LAIN' => 'LAIN-LAIN',
+        ];
 
         function calculatePricePer($price_per, $amount)
         {
             // dd($amount);
             return $price_per * $amount;
         }
+
         return $form
             ->schema([
                 Fieldset::make('Data Pengeluaran')
                     ->schema([
                         Forms\Components\TextInput::make('title')
-                            ->label('Judul Pengeluaran')
+                            ->label('Judul Pembiayaan')
                             ->required()
                             ->maxLength(100),
                         Forms\Components\Select::make('category')
                             ->label('kategori biaya')
-                            ->options([
-                                'LAUNDRY' => 'LAUNDRY',
-                                'SPAREPART' => 'SPAREPART',
-                                'SERVICE_AC' => 'SERVICE_AC',
-                                'OTHER' => 'OTHER',
-                            ]),
-                        Forms\Components\TextInput::make('amount')
-                            ->label('jumlah satuan')
-                            ->integer(),
-                        Forms\Components\Select::make('unit')
-                            ->label('satuan')
-                            ->options([
-                                'pieces' => 'pieces',
-                                'unit' => 'unit',
-                                'buah' => 'buah',
-                                'set' => 'set',
-                                'potong' => 'potong',
-                                'meter' => 'meter',
-                                'kg' => 'kg',
-                                'gram' => 'gram',
-                                'roll' => 'roll',
-                                'liter' => 'liter',
-                                'galon' => 'galon',
-                                'ekor' => 'ekor',
-                                'kubik' => 'kubik',
-                            ])
-                            ->required(),
-                        Forms\Components\TextInput::make('price_per')
-                            ->label('harga per satuan')
-                            ->numeric()
-                            ->prefix('Rp')
-                            ->dehydrated(true)
-                            ->reactive()
-                            ->suffixAction(
-                                Action::make('copyCostToPrice')
-                                    ->icon('heroicon-m-calculator')
-                                    ->action(function (Set $set, Get $get, $state) {
-                                        $amountPer = $get('amount');
+                            ->options($typeOfExpenses),
+                        // Forms\Components\TextInput::make('amount')
+                        //     ->label('jumlah satuan')
+                        //     ->integer(),
+                        // Forms\Components\Select::make('unit')
+                        //     ->label('satuan')
+                        //     ->options([
+                        //         'pieces' => 'pieces',
+                        //         'unit' => 'unit',
+                        //         'buah' => 'buah',
+                        //         'set' => 'set',
+                        //         'potong' => 'potong',
+                        //         'meter' => 'meter',
+                        //         'kg' => 'kg',
+                        //         'gram' => 'gram',
+                        //         'roll' => 'roll',
+                        //         'liter' => 'liter',
+                        //         'galon' => 'galon',
+                        //         'ekor' => 'ekor',
+                        //         'kubik' => 'kubik',
+                        //     ])
+                        //     ->required(),
+                        // Forms\Components\TextInput::make('price_per')
+                        //     ->label('harga per satuan')
+                        //     ->numeric()
+                        //     ->prefix('Rp')
+                        //     ->dehydrated(true)
+                        //     ->reactive()
+                        //     ->suffixAction(
+                        //         Action::make('copyCostToPrice')
+                        //             ->icon('heroicon-m-calculator')
+                        //             ->action(function (Set $set, Get $get, $state) {
+                        //                 $amountPer = $get('amount');
 
-                                        $res =  calculatePricePer($state, $amountPer);
+                        //                 $res =  calculatePricePer($state, $amountPer);
 
-                                        $set('price_total', $res);
-                                    })
-                            ),
+                        //                 $set('price_total', $res);
+                        //             })
+                        //     ),
                         Forms\Components\TextInput::make('price_total')
                             ->label('harga total')
                             ->mask(RawJs::make('$money($input)'))
                             ->stripCharacters(',')
                             ->numeric()
-                            ->prefix('Rp')
-                            ->readOnly(),
+                            ->prefix('Rp'),
                         Forms\Components\TextInput::make('origin_from')
-                            ->label('dibeli dari')
+                            ->label('Dibelanjakan oleh')
                             ->required()
                             ->maxLength(255),
                         Forms\Components\Textarea::make('description')
@@ -138,7 +139,7 @@ class ExpensesResource extends Resource
                     ->label('metode bayar'),
                 Tables\Columns\TextColumn::make('category')
                     ->label('kategori'),
-                Tables\Columns\TextColumn::make('amount'),
+                // Tables\Columns\TextColumn::make('amount'),
                 Tables\Columns\TextColumn::make('price_total')
                     ->label('Nominal Total')
                     ->money('idr')
@@ -199,9 +200,6 @@ class ExpensesResource extends Resource
                                 Column::make('category'),
                                 Column::make('title'),
                                 Column::make('payment.name'),
-                                Column::make('unit'),
-                                Column::make('price_per'),
-                                Column::make('price_total'),
                                 Column::make('origin_from'),
                                 Column::make('description'),
                                 Column::make('created_at'),

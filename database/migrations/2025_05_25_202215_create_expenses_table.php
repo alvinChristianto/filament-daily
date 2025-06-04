@@ -18,11 +18,11 @@ return new class extends Migration
 
             $table->foreignId('id_payment')->references('id')->on('payments');
 
-            $table->enum('category', ['LAUNDRY', 'SPAREPART', 'SERVICE_AC', 'OTHER']);
-            $table->unsignedInteger('amount');
-            $table->string('unit');
-            $table->unsignedInteger('price_per');
-            $table->unsignedInteger('price_total');
+            $table->string('category');
+            $table->unsignedInteger('amount')->nullable();
+            $table->string('unit')->nullable();
+            $table->unsignedInteger('price_per')->nullable();
+            $table->unsignedInteger('price_total')->nullable();
             $table->string('origin_from')->nullable();
             $table->text('description')->nullable();
             $table->string('image_expenses')->nullable();
