@@ -37,9 +37,13 @@ class ExpensesResource extends Resource
     public static function form(Form $form): Form
     {
         $typeOfExpenses = [
+            'GAJI_LAUNDRY' => 'GAJI_LAUNDRY',
+            'GAJI_SERVICE_AC' => 'GAJI_SERVICE_AC',
             'BIAYA_LAUNDRY' => 'BIAYA_LAUNDRY',
             'BIAYA_SPAREPART' => 'BIAYA_SPAREPART',
+            'BIAYA_SERVICE_MOTOR' => 'BIAYA_SERVICE_MOTOR',
             'MAKAN_SERVICE_AC' => 'MAKAN_SERVICE_AC',
+            'BENSIN' => 'BENSIN',
             'LAIN-LAIN' => 'LAIN-LAIN',
         ];
 
