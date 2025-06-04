@@ -245,8 +245,7 @@ class SparepartShipmentResource extends Resource
                             ->label('Catatan Penjualan')
                             ->columnSpanFull(),
                     ]),
-            ])
-            ->defaultSort('created_at', 'desc');
+            ]);
     }
 
     public static function table(Table $table): Table
@@ -281,6 +280,7 @@ class SparepartShipmentResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 Tables\Filters\Filter::make('created_at')
                     ->form([

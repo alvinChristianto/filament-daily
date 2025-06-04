@@ -38,6 +38,8 @@ class AADailyRevExpenses extends BaseWidget
                 Tables\Columns\TextColumn::make('date_record')
                     ->label('Tgl')
                     ->date('d F Y'),
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Deskripsi'),
                 Tables\Columns\TextColumn::make('revenue_laundry')
                     ->label('Pendapatan Laundry')
                     ->numeric()

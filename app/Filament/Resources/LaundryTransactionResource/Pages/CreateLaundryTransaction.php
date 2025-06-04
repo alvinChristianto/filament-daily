@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\LaundryTransactionResource\Pages;
 
 use App\Filament\Resources\LaundryTransactionResource;
+use App\Models\DailyRevenueExpenses;
 use App\Models\LaundryCustomer;
 use Carbon\Carbon;
 use Filament\Actions;
@@ -28,12 +29,33 @@ class CreateLaundryTransaction extends CreateRecord
         // Generate three random digits
         $randomDigits = str_pad(random_int(100, 999), 3, '0', STR_PAD_LEFT);
 
-        $transformId = "LDR_" . $year . $month . $day . $randomDigits ."_". $str;
+        $transformId = "LDR_" . $year . $month . $day . $randomDigits . "_" . $str;
         $data['id_transaction'] = $transformId;
 
         return ($data);
     }
 
+    protected function afterCreate(): void
+    {
+
+        $res = $this->record;
+        // dd($res);
+        $now = Carbon::now();
+        if ($res) {
+            //probably shound move after ubah status to paid
+            DailyRevenueExpenses::create([
+                'date_record' => $now,
+                'title' => $res["id_transaction"],
+                'id_transaction' => $res["id_transaction"],
+                'revenue_laundry' =>  $res["total_price"],
+                'revenue_serviceac' => 0,
+                'revenue_sparepart' =>  0,
+                'expense_buy_sparepart' => 0,
+                'expense_other' => 0,
+            ]);
+        }
+    }
+    
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

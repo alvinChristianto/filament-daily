@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\SparepartResource\Pages;
 
 use App\Filament\Resources\SparepartResource;
+use App\Models\DailyRevenueExpenses;
 use App\Models\SparepartShipment;
 use App\Models\SparepartStock;
 use Carbon\Carbon;
@@ -66,6 +67,17 @@ class CreateSparepart extends CreateRecord
             'amount' =>  $res["initial_amount"],
             'description' => $res["description"],
             'stock_record_date' => $now,
+        ]);
+
+        DailyRevenueExpenses::create([
+            'date_record' => $now,
+            'title' => $res["name"],
+            'id_transaction' =>  $res["id"],
+            'revenue_laundry' => 0,
+            'revenue_serviceac' => 0,
+            'revenue_sparepart' =>  0,
+            'expense_buy_sparepart' => $res["price"],
+            'expense_other' => 0,
         ]);
         // Runs after the form fields are saved to the database.
     }

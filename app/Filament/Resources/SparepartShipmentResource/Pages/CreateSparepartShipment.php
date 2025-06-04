@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\SparepartShipmentResource\Pages;
 
 use App\Filament\Resources\SparepartShipmentResource;
+use App\Models\DailyRevenueExpenses;
 use App\Models\SparepartStock;
 use Carbon\Carbon;
 use Filament\Actions;
@@ -76,6 +77,17 @@ class CreateSparepartShipment extends CreateRecord
                 //failed
             }
         }
+
+        DailyRevenueExpenses::create([
+            'date_record' => $now,
+            'title' => $res["id_transaction"],
+            'id_transaction' => $res["id_transaction"],
+            'revenue_laundry' => 0,
+            'revenue_serviceac' => 0,
+            'revenue_sparepart' =>  $res["total_price"],
+            'expense_buy_sparepart' => 0,
+            'expense_other' => 0,
+        ]);
     }
     protected function getRedirectUrl(): string
     {

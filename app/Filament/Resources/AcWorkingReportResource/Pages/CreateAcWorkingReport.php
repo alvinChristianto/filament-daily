@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\AcWorkingReportResource\Pages;
 
 use App\Filament\Resources\AcWorkingReportResource;
+use App\Models\DailyRevenueExpenses;
 use App\Models\SparepartStock;
 use Carbon\Carbon;
 use Filament\Actions;
@@ -66,6 +67,28 @@ class CreateAcWorkingReport extends CreateRecord
         }
         return $data;
     }
+
+    protected function afterCreate(): void
+    {
+
+        $res = $this->record;
+        // dd($res);
+        $now = Carbon::now();
+        if ($res) {
+            //probably shound move after ubah status to paid
+            DailyRevenueExpenses::create([
+                'date_record' => $now,
+                'title' => $res["title"],
+                'id_transaction' => $res["id_report"],
+                'revenue_laundry' => 0,
+                'revenue_serviceac' => $res["total_price"],
+                'revenue_sparepart' =>  0,
+                'expense_buy_sparepart' => 0,
+                'expense_other' => 0,
+            ]);
+        }
+    }
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

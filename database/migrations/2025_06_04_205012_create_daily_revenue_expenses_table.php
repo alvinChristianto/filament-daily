@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
 
             $table->dateTime('date_record');
+            $table->string('title')->nullable();
+            $table->string('id_transaction')->nullable();
             $table->unsignedInteger('revenue_laundry')->nullable();
             $table->unsignedInteger('revenue_serviceac')->nullable();
             $table->unsignedInteger('revenue_sparepart')->nullable();
