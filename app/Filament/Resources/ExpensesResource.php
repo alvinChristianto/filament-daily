@@ -132,10 +132,16 @@ class ExpensesResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id_expenses')
-                    ->label('Id')
-                    ->sortable()
-                    ->searchable(),
+                // Tables\Columns\TextColumn::make('id_expenses')
+                //     ->label('Id')
+                //     ->sortable()
+                //     ->searchable(),
+
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Tgl Dibuat')
+                    ->date('d m Y H:i:s')
+                    ->dateTime()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Judul Pembiayaan')
                     ->searchable(),
@@ -149,14 +155,7 @@ class ExpensesResource extends Resource
                     ->money('idr')
                     ->sortable()
                     ->summarize(Sum::make()),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')
@@ -211,7 +210,7 @@ class ExpensesResource extends Resource
                             ]),
                     ]),
                 ]),
-            ]);
+            ])->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

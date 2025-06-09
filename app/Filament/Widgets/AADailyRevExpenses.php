@@ -13,6 +13,9 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder as BuilderFilter;
 use Illuminate\Database\Query\Builder;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class AADailyRevExpenses extends BaseWidget
 {
@@ -116,6 +119,32 @@ class AADailyRevExpenses extends BaseWidget
                                 fn (BuilderFilter $query, $date): BuilderFilter => $query->whereDate('created_at', '<=', $date),
                             );
                     }),
-            ]);
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    // Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()
+                            ->withFilename('Summary Financial')
+                            // ->askForFilename()
+                            // ->withFilename(fn ($filename) => 'prefix-' . $filename)
+                            ->withColumns([
+                                Column::make('id'),
+                                Column::make('date_record'),
+                                Column::make('title'),
+                                Column::make('revenue_laundry'),
+                                Column::make('revenue_serviceac'),
+                                Column::make('revenue_sparepart'),
+
+                                Column::make('expense_buy_sparepart'),
+                                Column::make('expense_other'),
+                                Column::make('expense_other'),
+
+                                Column::make('net_profit'),
+
+                            ]),
+                    ]),
+                ]),
+            ])->defaultSort('created_at', 'desc');
     }
 }
