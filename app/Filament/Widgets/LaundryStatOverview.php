@@ -41,21 +41,21 @@ class LaundryStatOverview extends BaseWidget
         $yearlyRevenue = 'Rp ' . number_format($RawyearlyRevenue, 2, ',', '.');
 
         return [
-            Stat::make('Pend. LAUNDRY HARIAN', $dailyRevenue)
-                ->description('Pendapatan LAUNDRY Per Hari ini ' . Carbon::now()->format('d-m-Y'))
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                // ->url(route('filament.admin.resources.reservations.index'))
-                ->color('warning'),
-            Stat::make('Pend. LAUNDRY BULANAN', $monthlyRevenue)
-                ->description('Pendapatan LAUNDRY Per Bulan ' . Carbon::now()->format('M'))
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                // ->url(route('filament.admin.resources.reservations.index'))
-                ->color('warning'),
-            Stat::make('Pend. LAUNDRY TAHUNAN', $yearlyRevenue)
-                ->description('Pendapatan LAUNDRY pada tahun ' . $currentYear)
-                ->descriptionIcon('heroicon-m-arrow-trending-up')
-                // ->url(route('filament.admin.resources.reservations.index'))
-                ->color('warning'),
+            // Stat::make('Pend. LAUNDRY HARIAN', $dailyRevenue)
+            //     ->description('Pendapatan LAUNDRY Per Hari ini ' . Carbon::now()->format('d-m-Y'))
+            //     ->descriptionIcon('heroicon-m-arrow-trending-up')
+            //     // ->url(route('filament.admin.resources.reservations.index'))
+            //     ->color('warning'),
+            // Stat::make('Pend. LAUNDRY BULANAN', $monthlyRevenue)
+            //     ->description('Pendapatan LAUNDRY Per Bulan ' . Carbon::now()->format('M'))
+            //     ->descriptionIcon('heroicon-m-arrow-trending-up')
+            //     // ->url(route('filament.admin.resources.reservations.index'))
+            //     ->color('warning'),
+            // Stat::make('Pend. LAUNDRY TAHUNAN', $yearlyRevenue)
+            //     ->description('Pendapatan LAUNDRY pada tahun ' . $currentYear)
+            //     ->descriptionIcon('heroicon-m-arrow-trending-up')
+            //     // ->url(route('filament.admin.resources.reservations.index'))
+            //     ->color('warning'),
         ];
     }
 }
