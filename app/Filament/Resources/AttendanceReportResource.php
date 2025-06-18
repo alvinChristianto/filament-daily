@@ -19,6 +19,9 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class AttendanceReportResource extends Resource
 {
@@ -170,10 +173,25 @@ class AttendanceReportResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
+                    ExportBulkAction::make()->exports([
+                        ExcelExport::make()
+                            ->withFilename('absensi')
+                            // ->askForFilename()
+                            // ->withFilename(fn ($filename) => 'prefix-' . $filename)
+                            ->withColumns([
+                                Column::make('id'),
+                                Column::make('record_date'),
+                                Column::make('worker_name'),
+                                Column::make('is_present'),
+                                Column::make('type_absence'),
+                                Column::make('notes'),
+
+                            ]),
+                    ]),
                 ]),
             ])->defaultSort('created_at', 'desc');
     }
-    
+
     public static function getRelations(): array
     {
         return [
