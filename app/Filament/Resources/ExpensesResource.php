@@ -210,7 +210,13 @@ class ExpensesResource extends Resource
                             ]),
                     ]),
                 ]),
-            ])->defaultSort('created_at', 'desc');
+            ])
+            // ->defaultGroup('category')
+
+            // ->groupingSettingsHidden(false)
+            // ->groupsOnly()
+
+            ->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array

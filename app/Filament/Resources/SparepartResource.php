@@ -86,6 +86,15 @@ class SparepartResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            // ->query(
+            //     function (Builder $query) {
+            //         // Apply your 'active' state filter here
+            //         $RES = Sparepart::query()->where('status', 'NEW') // Assuming 'status' is your column name and 'active' is the value
+            //             ->orderBy('created_at', 'desc')->get(); // Example of other ordering
+                    
+            //         return $RES;
+            //     }
+            // )
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Barang')
@@ -123,7 +132,7 @@ class SparepartResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make(),
                     ExportBulkAction::make()->exports([
                         ExcelExport::make()
                             ->withFilename('data_sparepart')
@@ -141,7 +150,7 @@ class SparepartResource extends Resource
                             ]),
                     ]),
                 ]),
-            ]);
+            ])->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
