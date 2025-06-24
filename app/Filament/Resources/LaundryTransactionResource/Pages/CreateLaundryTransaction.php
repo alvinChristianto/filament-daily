@@ -46,6 +46,7 @@ class CreateLaundryTransaction extends CreateRecord
             DailyRevenueExpenses::create([
                 'date_record' => $now,
                 'title' => $res["id_transaction"],
+                'category' => 'PEND_LAUNDRY',
                 'id_transaction' => $res["id_transaction"],
                 'revenue_laundry' =>  $res["total_price"],
                 'revenue_serviceac' => 0,

@@ -73,6 +73,7 @@ class CreateSparepart extends CreateRecord
             'date_record' => $now,
             'title' => $res["name"],
             'id_transaction' =>  $res["id"],
+            'category' => 'BIAYA_BELI_SPAREPART',
             'revenue_laundry' => 0,
             'revenue_serviceac' => 0,
             'revenue_sparepart' =>  0,

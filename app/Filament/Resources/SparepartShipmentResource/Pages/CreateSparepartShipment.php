@@ -81,6 +81,7 @@ class CreateSparepartShipment extends CreateRecord
         DailyRevenueExpenses::create([
             'date_record' => $now,
             'title' => $res["id_transaction"],
+            'category' => 'PEND_SPAREPART',
             'id_transaction' => $res["id_transaction"],
             'revenue_laundry' => 0,
             'revenue_serviceac' => 0,

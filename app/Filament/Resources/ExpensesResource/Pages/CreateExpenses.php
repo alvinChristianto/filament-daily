@@ -37,6 +37,7 @@ class CreateExpenses extends CreateRecord
             DailyRevenueExpenses::create([
                 'date_record' => $now,
                 'title' => $res["title"],
+                'category' => 'BIAYA_PEMBIAYAAN',
                 'id_transaction' => $res["id_expenses"],
                 'revenue_laundry' => 0,
                 'revenue_serviceac' => 0,

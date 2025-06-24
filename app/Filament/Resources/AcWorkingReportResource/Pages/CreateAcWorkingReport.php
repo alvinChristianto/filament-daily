@@ -79,6 +79,7 @@ class CreateAcWorkingReport extends CreateRecord
             DailyRevenueExpenses::create([
                 'date_record' => $now,
                 'title' => $res["title"],
+                'category' => 'PEND_SERVICE_AC',
                 'id_transaction' => $res["id_report"],
                 'revenue_laundry' => 0,
                 'revenue_serviceac' => $res["total_price"],
