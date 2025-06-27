@@ -22,7 +22,7 @@ class SparepartStockResource extends Resource
 {
     protected static ?string $model = SparepartStock::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-cog-8-tooth';
 
     protected static ?string $navigationLabel = 'Stok Sparepart';
     protected static ?string $navigationGroup = 'Master Sparepart';

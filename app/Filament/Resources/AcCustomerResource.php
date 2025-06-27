@@ -17,7 +17,7 @@ class AcCustomerResource extends Resource
 {
     protected static ?string $model = AcCustomer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationLabel = 'Data Klien/Customer AC';
     protected static ?string $navigationGroup = 'Service AC';

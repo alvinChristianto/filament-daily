@@ -17,7 +17,7 @@ class AcWorkerResource extends Resource
 {
     protected static ?string $model = AcWorker::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationLabel = 'Pekerja AC';
     protected static ?string $navigationGroup = 'Service AC';

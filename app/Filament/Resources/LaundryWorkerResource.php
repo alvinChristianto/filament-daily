@@ -17,7 +17,7 @@ class LaundryWorkerResource extends Resource
 {
     protected static ?string $model = LaundryWorker::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $navigationLabel = 'Pekerja Laundry';
     protected static ?string $navigationGroup = 'Laundry';
