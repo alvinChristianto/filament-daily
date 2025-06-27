@@ -9,6 +9,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\Summarizers\Average;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Tables\Columns\Summarizers\Summarizer;
+use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Database\Eloquent\Builder as BuilderFilter;
@@ -32,10 +33,16 @@ class AADailyRevExpenses extends BaseWidget
 
                 // Return an Eloquent query for BakpiaTransaction model
                 // Filter transactions created within the current month
-                return DailyRevenueExpenses::query()
+                $res =  DailyRevenueExpenses::query()
+                    // ->select([
+                    //     'id', 'title', 'revenue_laundry', 'revenue_serviceac', 'revenue_sparepart', 'expense_buy_sparepart',
+                    //     'expense_other', 'category'
+                    // ])
                     ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
                     ->orderBy('created_at', 'desc'); // Order by creation date, newest first
                 // tidak ada filter dan data tidak muncul di widget ac reminder
+                // dd($res);
+                return $res;
             })
             ->columns([
                 Tables\Columns\TextColumn::make('date_record')
@@ -69,30 +76,6 @@ class AADailyRevExpenses extends BaseWidget
                     ->money('idr')
                     ->summarize(Sum::make()),
 
-                Tables\Columns\TextColumn::make('net_profit') // This column name doesn't have to exist in DB
-                    ->label('Net Profit')
-                    ->numeric() // For display formatting if it were a regular column
-                    ->money('idr') // For display formatting if it were a regular column
-                    ->summarize(
-                        Summarizer::make()
-                            ->label('Total Net Profit') // Label for the summary row
-                            ->using(function (Builder $query): string {
-                                // Calculate total revenue
-                                $totalRevenue = $query->sum('revenue_laundry') +
-                                    $query->sum('revenue_serviceac') +
-                                    $query->sum('revenue_sparepart');
-
-                                // Calculate total expenses
-                                $totalExpenses = $query->sum('expense_buy_sparepart') +
-                                    $query->sum('expense_other');
-
-                                // Calculate net profit
-                                $netProfit = $totalRevenue - $totalExpenses;
-
-                                // Format the result as IDR
-                                return 'Rp ' . number_format($netProfit, 0, ',', '.');
-                            })
-                    ),
             ])
             ->filters([
                 Tables\Filters\Filter::make('created_at')
@@ -146,6 +129,10 @@ class AADailyRevExpenses extends BaseWidget
                     ]),
                 ]),
             ])
+            ->groups([
+                'category',
+            ])
+
             // ->defaultGroup('category')
 
             // ->groupingSettingsHidden(false)

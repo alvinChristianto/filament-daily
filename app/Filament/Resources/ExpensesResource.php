@@ -42,7 +42,7 @@ class ExpensesResource extends Resource
             'BIAYA_LAUNDRY' => 'BIAYA_LAUNDRY',
             'BIAYA_SPAREPART' => 'BIAYA_SPAREPART',
             'BIAYA_SERVICE_MOTOR' => 'BIAYA_SERVICE_MOTOR',
-            'MAKAN_SERVICE_AC' => 'MAKAN_SERVICE_AC',
+            'MAKAN_MINUM_SERVICE_AC' => 'MAKAN_MINUM_SERVICE_AC',
             'BENSIN' => 'BENSIN',
             'LAIN-LAIN' => 'LAIN-LAIN',
         ];
