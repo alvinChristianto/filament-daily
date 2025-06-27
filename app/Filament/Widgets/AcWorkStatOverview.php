@@ -90,17 +90,17 @@ class AcWorkStatOverview extends BaseWidget
 
 
             Stat::make('Pengeluaran HARIAN ', $dailyExpenses)
-                ->description('Pengeluaran Per Hari ini ' .  Carbon::now()->format('d-m-Y'))
+                ->description('Pengeluaran SERVICE AC Per Hari ini ' .  Carbon::now()->format('d-m-Y'))
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 // ->url(route('filament.admin.resources.reservations.index'))
                 ->color('warning'),
             Stat::make('Pengeluaran BULANAN ', $monthlyExpenses)
-                ->description('Pengeluaran pada Bulan ' . Carbon::now()->format('M'))
+                ->description('Pengeluaran SERVICE AC pada Bulan ' . Carbon::now()->format('M'))
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 // ->url(route('filament.admin.resources.reservations.index'))
                 ->color('warning'),
             Stat::make('Pengeluaran TAHUNAN ', $yearlyExpenses)
-                ->description('Pengeluaran pada tahun ' . $currentYear)
+                ->description('Pengeluaran SERVICE AC pada tahun ' . $currentYear)
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 // ->url(route('filament.admin.resources.reservations.index'))
                 ->color('warning'),
