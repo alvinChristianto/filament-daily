@@ -18,6 +18,7 @@ return new class extends Migration
 
             $table->foreignId('id_payment')->references('id')->on('payments');
 
+            $table->dateTime('record_date');
             $table->string('category');
             $table->unsignedInteger('amount')->nullable();
             $table->string('unit')->nullable();

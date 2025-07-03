@@ -57,9 +57,14 @@ class ExpensesResource extends Resource
             ->schema([
                 Fieldset::make('Data Pengeluaran')
                     ->schema([
+                        Forms\Components\DatePicker::make('record_date')
+                            ->label('Tanggal pembiayaan')
+                            ->required()
+                            ->displayFormat('d/m/Y'),
                         Forms\Components\TextInput::make('title')
                             ->label('Judul Pembiayaan')
                             ->required()
+                            ->columnSpanFull()
                             ->maxLength(100),
                         Forms\Components\Select::make('category')
                             ->label('kategori biaya')
@@ -137,10 +142,10 @@ class ExpensesResource extends Resource
                 //     ->sortable()
                 //     ->searchable(),
 
-                Tables\Columns\TextColumn::make('created_at')
-                    ->label('Tgl Dibuat')
-                    ->date('d m Y H:i:s')
-                    ->dateTime()
+                Tables\Columns\TextColumn::make('record_date')
+                    ->label('Tgl Pembiayaan')
+                    // ->date('d m Y H:i:s')
+                    ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Judul Pembiayaan')
