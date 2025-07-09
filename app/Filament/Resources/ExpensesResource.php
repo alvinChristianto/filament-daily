@@ -160,6 +160,14 @@ class ExpensesResource extends Resource
                     ->money('idr')
                     ->sortable()
                     ->summarize(Sum::make()),
+                Tables\Columns\TextColumn::make('id_expenses')
+                    ->label('Id transaksi')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
             ])
             ->filters([
@@ -180,11 +188,11 @@ class ExpensesResource extends Resource
                         return $query
                             ->when(
                                 $data['dibuat dari'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['dibuat sampai'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     }),
                 Tables\Filters\SelectFilter::make('id_payment')

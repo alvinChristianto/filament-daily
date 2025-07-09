@@ -50,6 +50,10 @@ class AADailyRevExpenses extends BaseWidget
                     ->date('d F Y'),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Deskripsi'),
+                Tables\Columns\TextColumn::make('id_transaction')
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('category')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('revenue_laundry')
                     ->label('Pendapatan Laundry')
                     ->numeric()
@@ -95,11 +99,11 @@ class AADailyRevExpenses extends BaseWidget
                         return $query
                             ->when(
                                 $data['dibuat dari'],
-                                fn (BuilderFilter $query, $date): BuilderFilter => $query->whereDate('created_at', '>=', $date),
+                                fn(BuilderFilter $query, $date): BuilderFilter => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['dibuat sampai'],
-                                fn (BuilderFilter $query, $date): BuilderFilter => $query->whereDate('created_at', '<=', $date),
+                                fn(BuilderFilter $query, $date): BuilderFilter => $query->whereDate('created_at', '<=', $date),
                             );
                     }),
             ])
