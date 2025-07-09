@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ExpensesResource\Pages;
 use App\Filament\Resources\ExpensesResource\RelationManagers;
+use App\Models\DailyRevenueExpenses;
 use App\Models\Expenses;
 use Carbon\Carbon;
 use Filament\Forms;
@@ -202,6 +203,11 @@ class ExpensesResource extends Resource
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
+                    ->after(function (Expenses $record) {
+                        $idToDelete = $record->id_expenses;
+                        DailyRevenueExpenses::where('id_transaction', $idToDelete)->delete();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
