@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder; // <--- ADD THIS LINE
 
 class AcReminderOverview extends BaseWidget
 {
-   
+
     public function table(Table $table): Table
     {
         return $table
@@ -62,11 +62,15 @@ class AcReminderOverview extends BaseWidget
                         // Only apply the month filter if a month is selected
                         return $query->when(
                             $data['value'], // The selected month number (1-12)
-                            fn (Builder $query, $month) => $query->whereMonth('next_service_date', $month)
+                            fn(Builder $query, $month) => $query->whereMonth('next_service_date', $month)
                         );
                     })
                     ->label('Filter by Month')
                     ->default(Carbon::now()->month),
             ]);
+    }
+    public static function canView(): bool
+    {
+        return false;
     }
 }
