@@ -25,6 +25,18 @@ class CreateSparepart extends CreateRecord
     {
 
         $res = $this->record;
+        $drCash = 0;
+        $drNonCash = 0;
+        $crCash = 0;
+        $crNonCash = 0;
+        
+        // no id_payment from res 
+        // if ($res["id_payment"] == 1) {
+        //     $drCash = $res["total_price"];
+        // } else {
+        //     $drNonCash = $res["total_price"];
+        // }
+
 
         $now = Carbon::now();
         $year = $now->format('y'); // Use 'y' for two-digit year representation
@@ -79,6 +91,12 @@ class CreateSparepart extends CreateRecord
             'revenue_sparepart' =>  0,
             'expense_buy_sparepart' => $res["price"],
             'expense_other' => 0,
+
+            'payment_category' => 1,
+            'dr_cash' => $drCash,
+            'dr_noncash' =>  $drNonCash,
+            'cr_cash' => $crCash,
+            'cr_noncash' =>  $crNonCash
         ]);
         // Runs after the form fields are saved to the database.
     }

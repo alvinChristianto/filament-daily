@@ -30,7 +30,18 @@ class CreateExpenses extends CreateRecord
     {
 
         $res = $this->record;
-        // dd($res);
+
+        $drCash = 0;
+        $drNonCash = 0;
+        $crCash = 0;
+        $crNonCash = 0;
+
+        if ($res["id_payment"] == 1) {
+            $crCash = $res["price_total"];
+        } else {
+            $crNonCash = $res["price_total"];
+        }
+
         $now = Carbon::now();
         if ($res) {
 
@@ -44,6 +55,12 @@ class CreateExpenses extends CreateRecord
                 'revenue_sparepart' =>  0,
                 'expense_buy_sparepart' => 0,
                 'expense_other' => $res["price_total"],
+
+                'payment_category' =>  $res["id_payment"],
+                'dr_cash' => $drCash,
+                'dr_noncash' =>  $drNonCash,
+                'cr_cash' => $crCash,
+                'cr_noncash' =>  $crNonCash
             ]);
         }
     }

@@ -39,6 +39,7 @@ class AADailyRevExpenses extends BaseWidget
                     //     'expense_other', 'category'
                     // ])
                     ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
+                    ->whereIn('category', ['BIAYA_PEMBIAYAAN','PEND_SERVICE_AC'])
                     ->orderBy('created_at', 'desc'); // Order by creation date, newest first
                 // tidak ada filter dan data tidak muncul di widget ac reminder
                 // dd($res);
@@ -54,31 +55,55 @@ class AADailyRevExpenses extends BaseWidget
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('category')
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('revenue_laundry')
-                    ->label('Pendapatan Laundry')
+                Tables\Columns\TextColumn::make('payment.name')
+                    ->label('metode bayar')
+                    ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('dr_cash')
+                    ->label('Debet Cash')
                     ->numeric()
                     ->money('idr')
                     ->summarize(Sum::make()),
-                Tables\Columns\TextColumn::make('revenue_serviceac')
-                    ->label('Pendapatan Service AC')
+                Tables\Columns\TextColumn::make('dr_noncash')
+                    ->label('Debet non Cash')
                     ->numeric()
                     ->money('idr')
                     ->summarize(Sum::make()),
-                Tables\Columns\TextColumn::make('revenue_sparepart')
-                    ->label('Pendapatan Jual Sparepart')
+                Tables\Columns\TextColumn::make('cr_cash')
+                    ->label('Kredit Cash')
                     ->numeric()
                     ->money('idr')
                     ->summarize(Sum::make()),
-                Tables\Columns\TextColumn::make('expense_buy_sparepart')
-                    ->label('Biaya Beli Sparepart')
+                Tables\Columns\TextColumn::make('cr_noncash')
+                    ->label('Kredit non Cash')
                     ->numeric()
                     ->money('idr')
                     ->summarize(Sum::make()),
-                Tables\Columns\TextColumn::make('expense_other')
-                    ->label('Biaya Pembiayaan')
-                    ->numeric()
-                    ->money('idr')
-                    ->summarize(Sum::make()),
+
+                // Tables\Columns\TextColumn::make('revenue_laundry')
+                //     ->label('Pendapatan Laundry')
+                //     ->numeric()
+                //     ->money('idr')
+                //     ->summarize(Sum::make()),
+                // Tables\Columns\TextColumn::make('revenue_serviceac')
+                //     ->label('Pendapatan Service AC')
+                //     ->numeric()
+                //     ->money('idr')
+                //     ->summarize(Sum::make()),
+                // Tables\Columns\TextColumn::make('revenue_sparepart')
+                //     ->label('Pendapatan Jual Sparepart')
+                //     ->numeric()
+                //     ->money('idr')
+                //     ->summarize(Sum::make()),
+                // Tables\Columns\TextColumn::make('expense_buy_sparepart')
+                //     ->label('Biaya Beli Sparepart')
+                //     ->numeric()
+                //     ->money('idr')
+                //     ->summarize(Sum::make()),
+                // Tables\Columns\TextColumn::make('expense_other')
+                //     ->label('Biaya Pembiayaan')
+                //     ->numeric()
+                //     ->money('idr')
+                //     ->summarize(Sum::make()),
 
             ])
             ->filters([
