@@ -17,7 +17,8 @@ return new class extends Migration
             $table->dateTime('date_record');
             $table->string('title')->nullable();
             $table->string('category', length: 100)->nullable();
-            $table->string('payment_category', length: 45)->nullable();
+
+            $table->foreignId('payment_category')->references('id')->on('payments');
             $table->string('id_transaction')->nullable();
             $table->unsignedInteger('revenue_laundry')->nullable();
             $table->unsignedInteger('revenue_serviceac')->nullable();
