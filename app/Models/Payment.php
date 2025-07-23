@@ -26,4 +26,9 @@ class Payment extends Model
     {
         return $this->hasMany(Expenses::class, 'id');
     }
+
+    public function dailyRevenueExpenses(): HasMany
+    {
+        return $this->hasMany(DailyRevenueExpenses::class, 'id');
+    }
 }
