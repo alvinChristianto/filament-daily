@@ -79,7 +79,8 @@ class SparepartResource extends Resource
                     ->options([
                         'NEW' => 'BARU',
                         'SECOND' => 'SECOND',
-                    ]),
+                    ])
+                    ->required(),
             ]);
     }
 
