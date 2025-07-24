@@ -20,7 +20,7 @@ use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class AADailyRevExpenses extends BaseWidget
 {
-    protected static ?string $heading = 'Daily Financial Summary';
+    protected static ?string $heading = 'Summary Service AC';
     protected int | string | array $columnSpan = 'full';
     public function table(Table $table): Table
     {
