@@ -39,7 +39,7 @@ class AADailyRevExpenses extends BaseWidget
                     //     'expense_other', 'category'
                     // ])
                     ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                    ->whereIn('category', ['BIAYA_PEMBIAYAAN','PEND_SERVICE_AC'])
+                    ->whereIn('category', ['BIAYA_PEMBIAYAAN', 'PEND_SERVICE_AC'])
                     ->orderBy('created_at', 'desc'); // Order by creation date, newest first
                 // tidak ada filter dan data tidak muncul di widget ac reminder
                 // dd($res);
@@ -79,31 +79,36 @@ class AADailyRevExpenses extends BaseWidget
                     ->money('idr')
                     ->summarize(Sum::make()),
 
-                // Tables\Columns\TextColumn::make('revenue_laundry')
-                //     ->label('Pendapatan Laundry')
-                //     ->numeric()
-                //     ->money('idr')
-                //     ->summarize(Sum::make()),
-                // Tables\Columns\TextColumn::make('revenue_serviceac')
-                //     ->label('Pendapatan Service AC')
-                //     ->numeric()
-                //     ->money('idr')
-                //     ->summarize(Sum::make()),
-                // Tables\Columns\TextColumn::make('revenue_sparepart')
-                //     ->label('Pendapatan Jual Sparepart')
-                //     ->numeric()
-                //     ->money('idr')
-                //     ->summarize(Sum::make()),
-                // Tables\Columns\TextColumn::make('expense_buy_sparepart')
-                //     ->label('Biaya Beli Sparepart')
-                //     ->numeric()
-                //     ->money('idr')
-                //     ->summarize(Sum::make()),
-                // Tables\Columns\TextColumn::make('expense_other')
-                //     ->label('Biaya Pembiayaan')
-                //     ->numeric()
-                //     ->money('idr')
-                //     ->summarize(Sum::make()),
+                Tables\Columns\TextColumn::make('revenue_laundry')
+                    ->label('Pendapatan Laundry')
+                    ->numeric()
+                    ->money('idr')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->summarize(Sum::make()),
+                Tables\Columns\TextColumn::make('revenue_serviceac')
+                    ->label('Pendapatan Service AC')
+                    ->numeric()
+                    ->money('idr')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->summarize(Sum::make()),
+                Tables\Columns\TextColumn::make('revenue_sparepart')
+                    ->label('Pendapatan Jual Sparepart')
+                    ->numeric()
+                    ->money('idr')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->summarize(Sum::make()),
+                Tables\Columns\TextColumn::make('expense_buy_sparepart')
+                    ->label('Biaya Beli Sparepart')
+                    ->numeric()
+                    ->money('idr')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->summarize(Sum::make()),
+                Tables\Columns\TextColumn::make('expense_other')
+                    ->label('Biaya Pembiayaan')
+                    ->numeric()
+                    ->money('idr')
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->summarize(Sum::make()),
 
             ])
             ->filters([
