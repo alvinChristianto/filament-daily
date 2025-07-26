@@ -95,7 +95,7 @@ class CreateSparepart extends CreateRecord
             'payment_category' => 1,
             'dr_cash' => $drCash,
             'dr_noncash' =>  $drNonCash,
-            'cr_cash' => $crCash,
+            'cr_cash' =>  $res["price"],    //buy sparepart only use cash
             'cr_noncash' =>  $crNonCash
         ]);
         // Runs after the form fields are saved to the database.

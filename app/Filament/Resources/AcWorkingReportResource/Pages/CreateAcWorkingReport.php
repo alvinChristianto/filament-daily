@@ -87,7 +87,7 @@ class CreateAcWorkingReport extends CreateRecord
         if ($res) {
             //probably shound move after ubah status to paid
             DailyRevenueExpenses::create([
-                'date_record' => $now,
+                'date_record' => $res["in_time"],
                 'title' => $res["title"],
                 'category' => 'PEND_SERVICE_AC',
                 'id_transaction' => $res["id_report"],
