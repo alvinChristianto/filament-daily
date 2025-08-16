@@ -171,8 +171,8 @@ class AcWorkingReportResource extends Resource
                                             Log::info($selectedSparepartId);
                                         }
                                     )
-                                    ->searchable()
-                                    ->required(),
+                                    ->searchable(),
+                                    // ->required(),
 
                                 Hidden::make('name_sparepart'),
                                 Hidden::make('price_sell_sparepart'),
@@ -227,7 +227,7 @@ class AcWorkingReportResource extends Resource
                             ->label('total harga yang harus dibayar')
                             ->numeric()
                             ->prefix('Rp')
-                            ->disabled()
+                            // ->disabled()
                             ->dehydrated(true)
                             ->reactive()
                             ->required()
