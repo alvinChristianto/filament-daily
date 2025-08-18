@@ -172,7 +172,7 @@ class AcWorkingReportResource extends Resource
                                         }
                                     )
                                     ->searchable(),
-                                    // ->required(),
+                                // ->required(),
 
                                 Hidden::make('name_sparepart'),
                                 Hidden::make('price_sell_sparepart'),
@@ -350,11 +350,12 @@ class AcWorkingReportResource extends Resource
                 Tables\Columns\TextColumn::make('customer.name')
                     ->label('Klien')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('payment.name')
-                    ->label('metode bayar'),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Judul Pekerjaan')
-                    ->searchable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('payment.name')
+                    ->label('metode bayar'),
+
                 Tables\Columns\TextColumn::make('in_time')
                     ->label('waktu mulai')
                     ->dateTime()
@@ -370,7 +371,7 @@ class AcWorkingReportResource extends Resource
                     ->summarize(Sum::make()),
                 Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'SUCCESS' => 'success',
                         'OTHER' => 'info',
                         'FAILED' => 'danger',
@@ -379,6 +380,7 @@ class AcWorkingReportResource extends Resource
                     ->label('tgl service selanjutnya')
                     ->date()
                     ->sortable(),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -406,11 +408,11 @@ class AcWorkingReportResource extends Resource
                         return $query
                             ->when(
                                 $data['dibuat dari'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['dibuat sampai'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     }),
                 Tables\Filters\Filter::make('Tanggal Service terdekat')
@@ -428,7 +430,7 @@ class AcWorkingReportResource extends Resource
                         return $query
                             ->when(
                                 $data['Pengingat Service dari'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('next_service_date', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('next_service_date', '>=', $date),
                             );
                     }),
                 Tables\Filters\SelectFilter::make('id_payment')
@@ -440,7 +442,7 @@ class AcWorkingReportResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\Action::make('Pdf')
                     ->icon('heroicon-m-clipboard')
-                    ->url(fn (AcWorkingReport $record) => route('acWorkReport.report', $record))
+                    ->url(fn(AcWorkingReport $record) => route('acWorkReport.report', $record))
                     ->openUrlInNewTab(),
             ])
             ->bulkActions([

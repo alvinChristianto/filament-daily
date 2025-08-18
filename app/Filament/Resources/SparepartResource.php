@@ -17,6 +17,9 @@ use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use pxlrbt\FilamentExcel\Columns\Column;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
+
+
+
 class SparepartResource extends Resource
 {
     protected static ?string $model = Sparepart::class;
@@ -92,7 +95,7 @@ class SparepartResource extends Resource
             //         // Apply your 'active' state filter here
             //         $RES = Sparepart::query()->where('status', 'NEW') // Assuming 'status' is your column name and 'active' is the value
             //             ->orderBy('created_at', 'desc')->get(); // Example of other ordering
-                    
+
             //         return $RES;
             //     }
             // )
@@ -125,15 +128,18 @@ class SparepartResource extends Resource
 
             ])
             ->filters([
-                //
+                // Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                //soft deletes
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\ForceDeleteAction::make(),
+                Tables\Actions\RestoreAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
                     ExportBulkAction::make()->exports([
                         ExcelExport::make()
                             ->withFilename('data_sparepart')
@@ -150,6 +156,10 @@ class SparepartResource extends Resource
 
                             ]),
                     ]),
+                    //soft deletes
+                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])->defaultSort('created_at', 'desc');
     }
@@ -169,5 +179,13 @@ class SparepartResource extends Resource
             'create' => Pages\CreateSparepart::route('/create'),
             'edit' => Pages\EditSparepart::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }

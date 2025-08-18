@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
             $table->foreignId('id_warehouse')->references('id')->on('warehouses');
-            $table->foreignId('id_sparepart')->references('id')->on('spareparts');
+            $table->foreignId('id_sparepart')->nullable()->references('id')->on('spareparts')->onDelete('set null');;
 
             $table->string('id_transaction')->nullable();
             $table->enum('status', ['STOCK_IN', 'STOCK_SOLD_MAINSTORE', 'STOCK_SOLD_AC', 'RETURNED']);
