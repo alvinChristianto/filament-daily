@@ -112,28 +112,28 @@ class AADailyRevExpenses extends BaseWidget
 
             ])
             ->filters([
-                Tables\Filters\Filter::make('created_at')
+                Tables\Filters\Filter::make('date_record')
                     ->form([
-                        DatePicker::make('dibuat dari'),
-                        DatePicker::make('dibuat sampai'),
+                        DatePicker::make('transaksi dari'),
+                        DatePicker::make('transaksi sampai'),
                     ])
                     ->indicateUsing(function (array $data): ?string {
-                        if (!$data['dibuat dari'] && !$data['dibuat sampai']) {
+                        if (!$data['transaksi dari'] && !$data['transaksi sampai']) {
                             return null;
                         }
-                        $indicatorFrom = 'dibuat dari ' . Carbon::parse($data['dibuat dari'])->toFormattedDateString();
-                        $indicatorUntil = ' to ' . Carbon::parse($data['dibuat sampai'])->toFormattedDateString();
+                        $indicatorFrom = 'transaksi dari ' . Carbon::parse($data['transaksi dari'])->toFormattedDateString();
+                        $indicatorUntil = ' to ' . Carbon::parse($data['transaksi sampai'])->toFormattedDateString();
                         return $indicatorFrom . " " . $indicatorUntil;
                     })
                     ->query(function (BuilderFilter $query, array $data): BuilderFilter {
                         return $query
                             ->when(
-                                $data['dibuat dari'],
-                                fn(BuilderFilter $query, $date): BuilderFilter => $query->whereDate('created_at', '>=', $date),
+                                $data['transaksi dari'],
+                                fn(BuilderFilter $query, $date): BuilderFilter => $query->whereDate('date_record', '>=', $date),
                             )
                             ->when(
-                                $data['dibuat sampai'],
-                                fn(BuilderFilter $query, $date): BuilderFilter => $query->whereDate('created_at', '<=', $date),
+                                $data['transaksi sampai'],
+                                fn(BuilderFilter $query, $date): BuilderFilter => $query->whereDate('date_record', '<=', $date),
                             );
                     }),
             ])
