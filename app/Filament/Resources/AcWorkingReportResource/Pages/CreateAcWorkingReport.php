@@ -28,42 +28,47 @@ class CreateAcWorkingReport extends CreateRecord
 
         $transformId = "INV_" . $year . $month . $day . $randomDigits;
         $data['id_report'] = $transformId;
-        foreach ($data['transaction_detail'] as $item) {
+        
+        if (isset($data['transaction_detail'])) {
+            foreach ($data['transaction_detail'] as $item) {
 
-            $stockFromGudang = SparepartStock::all()
-                ->where('id_sparepart', $item["id_sparepart"])
-                ->where('status', 'STOCK_IN')
-                ->sum('amount');
+                $stockFromGudang = SparepartStock::all()
+                    ->where('id_sparepart', $item["id_sparepart"])
+                    ->where('status', 'STOCK_IN')
+                    ->sum('amount');
 
-            $stockSold = SparepartStock::all()
-                ->where('id_sparepart', $item["id_sparepart"])
-                ->where('status', 'STOCK_SOLD')
-                ->sum('amount');
+                $stockSold = SparepartStock::all()
+                    ->where('id_sparepart', $item["id_sparepart"])
+                    ->where('status', 'STOCK_SOLD')
+                    ->sum('amount');
 
-            $stockReturned = SparepartStock::all()
-                ->where('id_sparepart', $item["id_sparepart"])
-                ->where('status', 'RETURNED')
-                ->sum('amount');
+                $stockReturned = SparepartStock::all()
+                    ->where('id_sparepart', $item["id_sparepart"])
+                    ->where('status', 'RETURNED')
+                    ->sum('amount');
 
-            $totalStock = $stockFromGudang - $stockSold + $stockReturned;
-            $checkStockBakpia = $totalStock - $item["amount"];
+                $totalStock = $stockFromGudang - $stockSold + $stockReturned;
+                $checkStockBakpia = $totalStock - $item["amount"];
 
-            Log::info($checkStockBakpia . ' | IN ' . $stockFromGudang . ' | SOLD ' . $stockSold . ' | RETN ' . $stockReturned . " || " . $item["amount"]);
+                Log::info($checkStockBakpia . ' | IN ' . $stockFromGudang . ' | SOLD ' . $stockSold . ' | RETN ' . $stockReturned . " || " . $item["amount"]);
 
-            if ($checkStockBakpia > 0) {
+                if ($checkStockBakpia > 0) {
 
-                SparepartStock::create([
-                    'id_warehouse' => '1', //$res["id_warehouse"], //$res['id_outlet'], //lol
-                    'id_sparepart' => $item["id_sparepart"],
-                    'id_transaction' => $data['id_report'],
-                    'status' => 'STOCK_SOLD_AC',
-                    'amount' =>  $item["amount"],
-                    'description' => $data["working_description"],
-                    'stock_record_date' => $now,
-                ]);
-            } else {
-                //failed
+                    SparepartStock::create([
+                        'id_warehouse' => '1', //$res["id_warehouse"], //$res['id_outlet'], //lol
+                        'id_sparepart' => $item["id_sparepart"],
+                        'id_transaction' => $data['id_report'],
+                        'status' => 'STOCK_SOLD_AC',
+                        'amount' =>  $item["amount"],
+                        'description' => $data["working_description"],
+                        'stock_record_date' => $now,
+                    ]);
+                } else {
+                    //failed
+                }
             }
+        } else {
+            $data['transaction_detail'] = '';
         }
         return $data;
     }

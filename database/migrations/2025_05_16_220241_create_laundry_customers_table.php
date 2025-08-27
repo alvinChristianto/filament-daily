@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
 
             $table->string('name', length: 100);
-            $table->enum('gender', ['-', 'L', 'P']);
-            $table->enum('category', ['PERSON', 'PT', 'OTHER']);
-            $table->string('phone_number', length: 20);
+            $table->enum('gender', ['-', 'L', 'P'])->nullable();
+            $table->enum('category', ['PERSON', 'PT', 'OTHER'])->nullable();
+            $table->string('phone_number', length: 20)->nullable();
             $table->string('email', length: 100)->nullable();
             $table->string('address', length: 100)->nullable();
             $table->timestamps();

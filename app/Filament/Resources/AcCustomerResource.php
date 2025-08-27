@@ -31,7 +31,8 @@ class AcCustomerResource extends Resource
                 ->label('nama klien')
                     ->required()
                     ->maxLength(100)
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->required(),
                 Forms\Components\Select::make('gender')
                     ->options([
                         'L' => 'Laki-laki',
@@ -47,12 +48,10 @@ class AcCustomerResource extends Resource
                     ]),
                 Forms\Components\TextInput::make('phone_number')
                 ->label('no. telepon')
-                    ->required()
                     ->tel(),
                 Forms\Components\TextInput::make('email')
                     ->label('email'),
                 Forms\Components\Textarea::make('address')
-                    ->required()
                     ->label('Alamat'),
 
             ]);

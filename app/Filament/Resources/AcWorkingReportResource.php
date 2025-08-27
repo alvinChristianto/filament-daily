@@ -140,82 +140,83 @@ class AcWorkingReportResource extends Resource
                             ->multiple()
                             ->image(),
                     ]),
-                Fieldset::make('Detail sparepart')
-                    ->schema([
-                        Repeater::make('transaction_detail')
-                            ->label('detail sparepart')
-                            ->schema([
-                                Forms\Components\Select::make('id_sparepart')
-                                    ->label('Nama Sparepart')
-                                    ->options(function (Get $get) {
-                                        return Sparepart::pluck('name', 'id');
-                                    })
-                                    ->live()
-                                    ->afterStateUpdated(
-                                        function (Set $set, Get $get, $state) {
-                                            // $state here is the currently selected ID (e.g., '1', '2', etc.)
-                                            $selectedSparepartId = $state;
+                // Fieldset::make('Detail sparepart')
+                //     ->schema([
+                //         Repeater::make('transaction_detail')
+                //             ->label('detail sparepart')
+                //             ->schema([
+                //                 Forms\Components\Select::make('id_sparepart')
+                //                     ->label('Nama Sparepart')
+                //                     ->options(function (Get $get) {
+                //                         return Sparepart::pluck('name', 'id');
+                //                     })
+                //                     ->live()
+                //                     ->afterStateUpdated(
+                //                         function (Set $set, Get $get, $state) {
+                //                             // $state here is the currently selected ID (e.g., '1', '2', etc.)
+                //                             $selectedSparepartId = $state;
 
-                                            // You can now use $selectedSparepartId to fetch related data or update other fields.
-                                            if ($selectedSparepartId) {
-                                                $sparepart = Sparepart::find($selectedSparepartId);
-                                                if ($sparepart) {
-                                                    // Example: Set another TextInput named 'sparepart_price' with the selected sparepart's price
-                                                    $set('name_sparepart', $sparepart->name);
-                                                    $set('price_sell_sparepart', $sparepart->sell_price);
-                                                }
-                                            } else {
-                                                $set('name_sparepart', null);
-                                                $set('price_sell_sparepart', null);
-                                            }
-                                            Log::info($selectedSparepartId);
-                                        }
-                                    )
-                                    ->searchable(),
-                                // ->required(),
+                //                             // You can now use $selectedSparepartId to fetch related data or update other fields.
+                //                             if ($selectedSparepartId) {
+                //                                 $sparepart = Sparepart::find($selectedSparepartId);
+                //                                 if ($sparepart) {
+                //                                     // Example: Set another TextInput named 'sparepart_price' with the selected sparepart's price
+                //                                     $set('name_sparepart', $sparepart->name);
+                //                                     $set('price_sell_sparepart', $sparepart->sell_price);
+                //                                 }
+                //                             } else {
+                //                                 $set('name_sparepart', null);
+                //                                 $set('price_sell_sparepart', null);
+                //                             }
+                //                             Log::info($selectedSparepartId);
+                //                         }
+                //                     )
+                //                     ->searchable(),
+                //                 // ->required(),
 
-                                Hidden::make('name_sparepart'),
-                                Hidden::make('price_sell_sparepart'),
-                                Forms\Components\TextInput::make('amount')
-                                    ->label('jumlah satuan')
-                                    ->integer(),
-                                Forms\Components\TextInput::make('price_per')
-                                    ->label('harga per satuan')
-                                    // ->numeric()
-                                    // ->disabled()
-                                    ->dehydrated(true)
-                                    ->reactive()
-                                    ->suffixAction(
-                                        Action::make('copyCostToPrice')
-                                            ->icon('heroicon-m-calculator')
-                                            ->action(function (Set $set, Get $get, $state) {
-                                                $amountPer = $get('amount');
-                                                $idSpareaprt = $get('id_sparepart');
+                //                 Hidden::make('name_sparepart'),
+                //                 Hidden::make('price_sell_sparepart'),
+                //                 Forms\Components\TextInput::make('amount')
+                //                     ->label('jumlah satuan')
+                //                     ->integer(),
+                //                 Forms\Components\TextInput::make('price_per')
+                //                     ->label('harga per satuan')
+                //                     // ->numeric()
+                //                     // ->disabled()
+                //                     ->dehydrated(true)
+                //                     ->reactive()
+                //                     ->suffixAction(
+                //                         Action::make('copyCostToPrice')
+                //                             ->icon('heroicon-m-calculator')
+                //                             ->action(function (Set $set, Get $get, $state) {
+                //                                 $amountPer = $get('amount');
+                //                                 $idSpareaprt = $get('id_sparepart');
 
-                                                $res =  calculatePricePer_AC($idSpareaprt, $amountPer);
+                //                                 $res =  calculatePricePer_AC($idSpareaprt, $amountPer);
 
-                                                $set('price_per', $res[0]);
+                //                                 $set('price_per', $res[0]);
 
-                                                $set('stock_latest', $res[1]);
+                //                                 $set('stock_latest', $res[1]);
 
-                                                $set('stock_after_sold', $res[2]);
-                                            })
-                                    ),
+                //                                 $set('stock_after_sold', $res[2]);
+                //                             })
+                //                     ),
 
-                                Forms\Components\TextInput::make('stock_latest')
-                                    ->label('stock terakhir')
-                                    ->integer()
-                                    ->disabled(),
+                //                 Forms\Components\TextInput::make('stock_latest')
+                //                     ->label('stock terakhir')
+                //                     ->integer()
+                //                     ->disabled(),
 
-                                Forms\Components\TextInput::make('stock_after_sold')
-                                    ->label('stock setelah dijual')
-                                    ->integer()
-                                    ->disabled(),
+                //                 Forms\Components\TextInput::make('stock_after_sold')
+                //                     ->label('stock setelah dijual')
+                //                     ->integer()
+                //                     ->disabled(),
 
-                            ])
-                            ->columnSpan('full')
-                            ->columns(3)
-                    ]),
+                //             ])
+                //             ->columnSpan('full')
+                //             ->columns(3)
+                //     ]),
+                    
                 Fieldset::make('Data Pembayaran')
                     ->schema([
                         Forms\Components\TextInput::make('discount')
@@ -304,15 +305,15 @@ class AcWorkingReportResource extends Resource
                             ->schema([
                                 Forms\Components\TextInput::make('name')
                                     ->required()
-                                    ->maxLength(100),
+                                    ->maxLength(100)
+                                    ->required(),
                                 Forms\Components\TextInput::make('email')
                                     ->label('Email address')
                                     ->email()
                                     ->maxLength(255),
                                 Forms\Components\TextInput::make('phone_number')
                                     ->label('Phone number')
-                                    ->tel()
-                                    ->required(),
+                                    ->tel(),
 
 
                                 Forms\Components\Select::make('gender')
@@ -320,8 +321,7 @@ class AcWorkingReportResource extends Resource
                                         'L' => 'Laki-laki',
                                         'P' => 'Perempuan',
                                         '-' => 'Lainnya'
-                                    ])
-                                    ->required(),
+                                    ]),
                                 Forms\Components\Textarea::make('address')
                                     ->rows(2)
                                     ->cols(10)
