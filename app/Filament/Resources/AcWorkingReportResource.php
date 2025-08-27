@@ -270,23 +270,20 @@ class AcWorkingReportResource extends Resource
                                     ->maxLength(255),
                                 Forms\Components\TextInput::make('phone_number')
                                     ->label('Phone number')
-                                    ->tel()
-                                    ->required(),
+                                    ->tel(),
 
                                 Forms\Components\Select::make('category')
                                     ->options([
                                         'PERSON' => 'INDIVIDU',
                                         'PT' => 'BADAN USAHA',
                                         'OTHER' => 'Lainnya'
-                                    ])
-                                    ->required(),
+                                    ]),
                                 Forms\Components\Select::make('gender')
                                     ->options([
                                         'L' => 'Laki-laki',
                                         'P' => 'Perempuan',
                                         '-' => 'Lainnya'
-                                    ])
-                                    ->required(),
+                                    ]),
                                 Forms\Components\Textarea::make('address')
                                     ->rows(2)
                                     ->cols(10)
