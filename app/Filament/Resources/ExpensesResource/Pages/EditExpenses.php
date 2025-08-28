@@ -45,6 +45,7 @@ class EditExpenses extends EditRecord
 
         DailyRevenueExpenses::where('id_transaction', $updateData['id_expenses'])
             ->update([
+                'date_record' => $updateData["record_date"],
                 'title' => $updateData['title'],
                 'payment_category' => $updateData["id_payment"],
                 // 'dr_cash' => $drCash,            //no need to update since it is expenses
