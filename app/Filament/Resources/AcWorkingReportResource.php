@@ -216,7 +216,7 @@ class AcWorkingReportResource extends Resource
                 //             ->columnSpan('full')
                 //             ->columns(3)
                 //     ]),
-                    
+
                 Fieldset::make('Data Pembayaran')
                     ->schema([
                         Forms\Components\TextInput::make('discount')
@@ -334,7 +334,12 @@ class AcWorkingReportResource extends Resource
                     ->required()
                     ->displayFormat('d/m/Y')
                     ->minDate(now()),
-
+                Forms\Components\Select::make('status')
+                    ->label('Status Pembayaran')
+                    ->options([
+                        'SUCCESS' => 'LUNAS',
+                        'DP' => 'DP',
+                    ])
             ]);
     }
 
@@ -349,7 +354,8 @@ class AcWorkingReportResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
                     ->label('Judul Pekerjaan')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('payment.name')
                     ->label('metode bayar'),
 
@@ -370,6 +376,7 @@ class AcWorkingReportResource extends Resource
                     ->badge()
                     ->color(fn(string $state): string => match ($state) {
                         'SUCCESS' => 'success',
+                        'DP' => 'danger',
                         'OTHER' => 'info',
                         'FAILED' => 'danger',
                     }),
@@ -388,6 +395,11 @@ class AcWorkingReportResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                Tables\Filters\SelectFilter::make('status')
+                    ->options([
+                        'Success' => 'Lunas/Success',
+                        'DP' => 'DP',
+                    ]),
                 Tables\Filters\Filter::make('created_at')
                     ->form([
                         DatePicker::make('dibuat dari'),
