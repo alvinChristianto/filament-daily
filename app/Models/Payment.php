@@ -31,4 +31,9 @@ class Payment extends Model
     {
         return $this->hasMany(DailyRevenueExpenses::class, 'id');
     }
+    
+    public function otherRevenue(): HasMany
+    {
+        return $this->hasMany(OtherRevenue::class, 'id');
+    }
 }
