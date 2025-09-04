@@ -22,7 +22,6 @@ class EditOtherRevenue extends EditRecord
     {
         $updateData = $this->data;
         // dd($updateData);
-        tinggal push , migrate one file, jgn lupa edit di table  daily revenue expes tambah kolom other revenue
         $drCash = 0;
         $drNonCash = 0;
         $crCash = 0;
