@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title', length: 100);
             $table->foreignId('id_payment')->references('id')->on('payments');
 
-            $table->integer('total_price')->nullable();
+            $table->integer('total_revenue')->nullable();
             $table->text('description')->nullable();
             $table->enum('status', ['LUNAS', 'DP']);
             $table->dateTime('transaction_date');
