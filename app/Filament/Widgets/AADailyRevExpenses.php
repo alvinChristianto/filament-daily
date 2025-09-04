@@ -39,7 +39,7 @@ class AADailyRevExpenses extends BaseWidget
                     //     'expense_other', 'category'
                     // ])
                     ->whereBetween('created_at', [$startOfMonth, $endOfMonth])
-                    ->whereIn('category', ['BIAYA_PEMBIAYAAN', 'PEND_SERVICE_AC'])
+                    ->whereIn('category', ['BIAYA_PEMBIAYAAN', 'PEND_SERVICE_AC', 'PEND_LAINLAIN'])
                     ->orderBy('created_at', 'desc'); // Order by creation date, newest first
                 // tidak ada filter dan data tidak muncul di widget ac reminder
                 // dd($res);
