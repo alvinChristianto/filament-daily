@@ -18,6 +18,12 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
+
+        //enable this for extra security on admin panel
+        // if ($panel->getId() === 'admin') {
+        //     return str_ends_with($this->email, '@gmail.com') && $this->hasVerifiedEmail();
+        // }
+
         return true;
     }
 
@@ -53,5 +59,11 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        // Example: Check if the user's role is 'admin'
+        return$this->hasRole('super_admin');        //user with role super_admin is eligible to access admin panel
     }
 }
