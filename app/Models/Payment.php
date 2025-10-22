@@ -36,4 +36,9 @@ class Payment extends Model
     {
         return $this->hasMany(OtherRevenue::class, 'id');
     }
+
+     public function dailySparepartTrxRevenueExpenses(): HasMany
+    {
+        return $this->hasMany(DailySparepartTrxRevenueExpenses::class, 'id');
+    }
 }

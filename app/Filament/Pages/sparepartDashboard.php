@@ -4,6 +4,7 @@ namespace App\Filament\Pages;
 
 use App\Filament\Widgets\AADailyRevExpenses;
 use App\Filament\Widgets\AcReminderOverview;
+use App\Models\DailySparepartTrxRevenueExpenses;
 use Filament\Actions\Action;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
@@ -15,7 +16,7 @@ class sparepartDashboard extends Page
 
     protected static string $view = 'filament.pages.sparepart-dashboard';
     protected ?string $heading = ' Dashboard Sparepart';
-    protected ?string $subheading = 'Halaman dashboard untuk manajemen keuangan sparepart';
+    protected ?string $subheading = 'Halaman dashboard untuk melihat ringkasan transaksi (beli dan jual) sparepart';
 
     // protected static ?string $navigationLabel = 'Custom Navigation Label';
     // public function getTitle(): string | Htmlable
@@ -26,12 +27,13 @@ class sparepartDashboard extends Page
     protected function getHeaderWidgets(): array
     {
         return [
-            // AcReminderOverview::class
+             DailySparepartTrxRevenueExpenses::class
         ];
     }
 
     public static function canAccess(): bool
     {
-        return auth()->user()->isSuperAdmin();
+        // return auth()->user()->isSuperAdmin();
+        return true;
     }
 }
