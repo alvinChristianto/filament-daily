@@ -20,6 +20,8 @@ use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class ABDailySparepartTrxRevExpenses extends BaseWidget
 {
+    protected static ?string $heading = 'Summary Transaksi Sparepart';
+    protected int | string | array $columnSpan = 'full';
     public function table(Table $table): Table
     {
         return $table
@@ -163,5 +165,8 @@ class ABDailySparepartTrxRevExpenses extends BaseWidget
             ->defaultSort('created_at', 'desc');
     }
 
-
+    // public static function canView(): bool
+    // {
+    //     return true;
+    // }
 }

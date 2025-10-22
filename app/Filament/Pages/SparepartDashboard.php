@@ -2,15 +2,14 @@
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\AADailyRevExpenses;
-use App\Filament\Widgets\AcReminderOverview;
-use App\Models\DailySparepartTrxRevenueExpenses;
+use App\Filament\Widgets\ABDailySparepartTrxRevExpenses;
+use App\Filament\Widgets\SparepartStatOverview;
 use Filament\Actions\Action;
 use Filament\Pages\Page;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
 
-class sparepartDashboard extends Page
+class SparepartDashboard extends Page
 {
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
 
@@ -18,7 +17,7 @@ class sparepartDashboard extends Page
     protected ?string $heading = ' Dashboard Sparepart';
     protected ?string $subheading = 'Halaman dashboard untuk melihat ringkasan transaksi (beli dan jual) sparepart';
 
-    // protected static ?string $navigationLabel = 'Custom Navigation Label';
+    protected static ?string $navigationLabel = 'Dashboard Sparepart';
     // public function getTitle(): string | Htmlable
     // {
     //     return __('Custom Page Title');
@@ -27,13 +26,19 @@ class sparepartDashboard extends Page
     protected function getHeaderWidgets(): array
     {
         return [
-             DailySparepartTrxRevenueExpenses::class
+            ABDailySparepartTrxRevExpenses::class,
+            SparepartStatOverview::class
         ];
     }
 
     public static function canAccess(): bool
     {
         // return auth()->user()->isSuperAdmin();
+        return true;
+    }
+
+    public static function canView(): bool
+    {
         return true;
     }
 }

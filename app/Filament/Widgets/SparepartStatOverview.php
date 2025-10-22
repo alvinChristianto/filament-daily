@@ -39,21 +39,21 @@ class SparepartStatOverview extends BaseWidget
         $yearlyRevenue = 'Rp ' . number_format($RawyearlyRevenue, 2, ',', '.');
 
         return [
-            // Stat::make('Pend. JUAL SPAREPART', $dailyRevenue)
-            //     ->description('Pendapatan SPAREPART Per Hari ini ' . Carbon::now()->format('d-m-Y'))
-            //     ->descriptionIcon('heroicon-m-arrow-trending-up')
-            //     // ->url(route('filament.admin.resources.reservations.index'))
-            //     ->color('primary'),
-            // Stat::make('Pend. JUAL SPAREPART', $monthlyRevenue)
-            //     ->description('Pendapatan SPAREPART Per Bulan ' . Carbon::now()->format('M'))
-            //     ->descriptionIcon('heroicon-m-arrow-trending-up')
-            //     // ->url(route('filament.admin.resources.reservations.index'))
-            //     ->color('primary'),
-            // Stat::make('Pend. JUAL SPAREPART', $yearlyRevenue)
-            //     ->description('Pendapatan SPAREPART pada tahun ' . $currentYear)
-            //     ->descriptionIcon('heroicon-m-arrow-trending-up')
-            //     // ->url(route('filament.admin.resources.reservations.index'))
-            //     ->color('primary'),
+            Stat::make('Pend. JUAL SPAREPART', $dailyRevenue)
+                ->description('Pendapatan SPAREPART Per Hari ini ' . Carbon::now()->format('d-m-Y'))
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                // ->url(route('filament.admin.resources.reservations.index'))
+                ->color('primary'),
+            Stat::make('Pend. JUAL SPAREPART', $monthlyRevenue)
+                ->description('Pendapatan SPAREPART Per Bulan ' . Carbon::now()->format('M'))
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                // ->url(route('filament.admin.resources.reservations.index'))
+                ->color('primary'),
+            Stat::make('Pend. JUAL SPAREPART', $yearlyRevenue)
+                ->description('Pendapatan SPAREPART pada tahun ' . $currentYear)
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                // ->url(route('filament.admin.resources.reservations.index'))
+                ->color('primary'),
         ];
     }
 }
