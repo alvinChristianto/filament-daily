@@ -4,6 +4,7 @@ namespace App\Filament\Resources\SparepartResource\Pages;
 
 use App\Filament\Resources\SparepartResource;
 use App\Models\DailyRevenueExpenses;
+use App\Models\DailySparepartTrxRevenueExpenses;
 use App\Models\SparepartShipment;
 use App\Models\SparepartStock;
 use Carbon\Carbon;
@@ -81,6 +82,7 @@ class CreateSparepart extends CreateRecord
             'stock_record_date' => $now,
         ]);
 
+        // 25102025 not used
         DailyRevenueExpenses::create([
             'date_record' => $now,
             'title' => $res["name"],
@@ -89,6 +91,24 @@ class CreateSparepart extends CreateRecord
             'revenue_laundry' => 0,
             'revenue_serviceac' => 0,
             'revenue_sparepart' =>  0,
+            'expense_buy_sparepart' => $res["price"],
+            'expense_other' => 0,
+
+            'payment_category' => 1,
+            'dr_cash' => $drCash,
+            'dr_noncash' =>  $drNonCash,
+            'cr_cash' =>  $res["price"],    //buy sparepart only use cash
+            'cr_noncash' =>  $crNonCash
+        ]);
+
+        //add at 25102025
+        DailySparepartTrxRevenueExpenses::create([
+            'date_record' => $now,
+            'id_transaction' =>  $res["id"],
+            'category' => 'BIAYA_BELI_SPAREPART',
+            
+            'revenue_sell_sparepart' => 0,
+            'revenue_other' =>  0,
             'expense_buy_sparepart' => $res["price"],
             'expense_other' => 0,
 

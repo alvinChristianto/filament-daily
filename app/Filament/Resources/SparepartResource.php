@@ -100,6 +100,8 @@ class SparepartResource extends Resource
             //     }
             // )
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('id'),
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Barang')
                     ->searchable(),

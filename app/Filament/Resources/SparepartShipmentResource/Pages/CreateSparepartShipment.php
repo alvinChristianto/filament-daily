@@ -4,6 +4,7 @@ namespace App\Filament\Resources\SparepartShipmentResource\Pages;
 
 use App\Filament\Resources\SparepartShipmentResource;
 use App\Models\DailyRevenueExpenses;
+use App\Models\DailySparepartTrxRevenueExpenses;
 use App\Models\SparepartStock;
 use Carbon\Carbon;
 use Filament\Actions;
@@ -68,11 +69,11 @@ class CreateSparepartShipment extends CreateRecord
                 ->sum('amount');
 
             $totalStock = $stockFromGudang - ($stockSoldMain + $stockSoldACService + $stockReturned);
-            $checkStockBakpia = $totalStock - $item["sent_stock"];
+            $checkStockB = $totalStock - $item["sent_stock"];
 
-            Log::info($checkStockBakpia . ' | IN ' . $stockFromGudang . ' | SOLD Gudang' . $stockSoldMain . ' SOLD Gudang ' . $stockSoldACService . ' SOLD ServiceAC ' . ' | RETN ' . $stockReturned . " || " . $item["sent_stock"]);
+            Log::info($checkStockB . ' | IN ' . $stockFromGudang . ' | SOLD Gudang' . $stockSoldMain . ' SOLD Gudang ' . $stockSoldACService . ' SOLD ServiceAC ' . ' | RETN ' . $stockReturned . " || " . $item["sent_stock"]);
 
-            if ($checkStockBakpia > 0) {
+            if ($checkStockB > 0) {
 
                 SparepartStock::create([
                     'id_warehouse' => '1', //$res["id_warehouse"], //$res['id_outlet'], //lol
@@ -88,6 +89,7 @@ class CreateSparepartShipment extends CreateRecord
             }
         }
 
+        //25102025 not used again
         DailyRevenueExpenses::create([
             'date_record' => $now,
             'title' => $res["id_transaction"],
@@ -105,6 +107,26 @@ class CreateSparepartShipment extends CreateRecord
             'cr_cash' => $crCash,
             'cr_noncash' =>  $crNonCash
         ]);
+
+        //add at 25102025
+        DailySparepartTrxRevenueExpenses::create([
+            'date_record' => $now,
+            'category' => 'PEND_SPAREPART',
+            'id_transaction' => $res["id_transaction"],
+            'revenue_sell_sparepart' =>  $res["total_price"],
+            'revenue_other' =>  0,
+            'expense_buy_sparepart' => 0,
+            'expense_other' => 0,
+
+            'payment_category' =>  $res["id_payment"],
+            'dr_cash' => $drCash,
+            'dr_noncash' =>  $drNonCash,
+            'cr_cash' => $crCash,
+            'cr_noncash' =>  $crNonCash
+        ]);
+
+
+
     }
     protected function getRedirectUrl(): string
     {

@@ -50,9 +50,9 @@ class ABDailySparepartTrxRevExpenses extends BaseWidget
                     ->label('Tgl')
                     ->date('d F Y'),
                 Tables\Columns\TextColumn::make('id_transaction')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('category')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: false),
                 Tables\Columns\TextColumn::make('payment.name')
                     ->label('metode bayar')
                     ->toggleable(isToggledHiddenByDefault: false),

@@ -319,11 +319,11 @@ class SparepartShipmentResource extends Resource
                         return $query
                             ->when(
                                 $data['dibuat dari'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
                             )
                             ->when(
                                 $data['dibuat sampai'],
-                                fn (Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     }),
                 Tables\Filters\SelectFilter::make('status')
@@ -338,10 +338,23 @@ class SparepartShipmentResource extends Resource
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->disabled(
+                        function (SparepartShipment $record): bool {
+                            // Cek jika status record adalah 'INITIAL'
+                            // dd($record);
+                            return $record->status === 'INITIAL';
+                        }
+                    )
+                    ->color(function (SparepartShipment $record): string {
+                        if ($record->status === 'INITIAL') {
+                            return 'grey';       //record INITIAL hanya bisa diedit di halaman sparepart saja  
+                        }
+                        return 'primary';
+                    }),
                 Tables\Actions\Action::make('Pdf')
                     ->icon('heroicon-m-clipboard')
-                    ->url(fn (SparepartShipment $record) => route('sparepartShipment.report', $record))
+                    ->url(fn(SparepartShipment $record) => route('sparepartShipment.report', $record))
                     ->openUrlInNewTab(),
             ])
             ->bulkActions([
