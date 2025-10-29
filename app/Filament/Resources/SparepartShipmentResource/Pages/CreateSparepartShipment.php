@@ -91,7 +91,7 @@ class CreateSparepartShipment extends CreateRecord
 
         //25102025 not used again
         DailyRevenueExpenses::create([
-            'date_record' => $now,
+            'date_record' => $res["transaction_date"],
             'title' => $res["id_transaction"],
             'category' => 'PEND_SPAREPART',
             'id_transaction' => $res["id_transaction"],
@@ -110,7 +110,7 @@ class CreateSparepartShipment extends CreateRecord
 
         //add at 25102025
         DailySparepartTrxRevenueExpenses::create([
-            'date_record' => $now,
+            'date_record' => $res["transaction_date"],
             'category' => 'PEND_SPAREPART',
             'id_transaction' => $res["id_transaction"],
             'revenue_sell_sparepart' =>  $res["total_price"],
