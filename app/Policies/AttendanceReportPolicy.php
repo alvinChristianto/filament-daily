@@ -3,10 +3,10 @@
 namespace App\Policies;
 
 use App\Models\User;
-use App\Models\OtherRevenue;
+use App\Models\AttendanceReport;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class OtherRevenuePolicy
+class AttendanceReportPolicy
 {
     use HandlesAuthorization;
 
@@ -15,15 +15,15 @@ class OtherRevenuePolicy
      */
     public function viewAny(User $user): bool
     {
-        return $user->can('view_any_other::revenue');
+        return $user->can('view_any_attendance::report');
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, OtherRevenue $otherRevenue): bool
+    public function view(User $user, AttendanceReport $attendanceReport): bool
     {
-        return $user->can('view_other::revenue');
+        return $user->can('view_attendance::report');
     }
 
     /**
@@ -31,23 +31,23 @@ class OtherRevenuePolicy
      */
     public function create(User $user): bool
     {
-        return $user->can('create_other::revenue');
+        return $user->can('create_attendance::report');
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, OtherRevenue $otherRevenue): bool
+    public function update(User $user, AttendanceReport $attendanceReport): bool
     {
-        return $user->can('update_other::revenue');
+        return $user->can('update_attendance::report');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, OtherRevenue $otherRevenue): bool
+    public function delete(User $user, AttendanceReport $attendanceReport): bool
     {
-        return $user->can('delete_other::revenue');
+        return $user->can('delete_attendance::report');
     }
 
     /**
@@ -55,15 +55,15 @@ class OtherRevenuePolicy
      */
     public function deleteAny(User $user): bool
     {
-        return $user->can('delete_any_other::revenue');
+        return $user->can('delete_any_attendance::report');
     }
 
     /**
      * Determine whether the user can permanently delete.
      */
-    public function forceDelete(User $user, OtherRevenue $otherRevenue): bool
+    public function forceDelete(User $user, AttendanceReport $attendanceReport): bool
     {
-        return $user->can('force_delete_other::revenue');
+        return $user->can('force_delete_attendance::report');
     }
 
     /**
@@ -71,15 +71,15 @@ class OtherRevenuePolicy
      */
     public function forceDeleteAny(User $user): bool
     {
-        return $user->can('force_delete_any_other::revenue');
+        return $user->can('force_delete_any_attendance::report');
     }
 
     /**
      * Determine whether the user can restore.
      */
-    public function restore(User $user, OtherRevenue $otherRevenue): bool
+    public function restore(User $user, AttendanceReport $attendanceReport): bool
     {
-        return $user->can('restore_other::revenue');
+        return $user->can('restore_attendance::report');
     }
 
     /**
@@ -87,15 +87,15 @@ class OtherRevenuePolicy
      */
     public function restoreAny(User $user): bool
     {
-        return $user->can('restore_any_other::revenue');
+        return $user->can('restore_any_attendance::report');
     }
 
     /**
      * Determine whether the user can replicate.
      */
-    public function replicate(User $user, OtherRevenue $otherRevenue): bool
+    public function replicate(User $user, AttendanceReport $attendanceReport): bool
     {
-        return $user->can('replicate_other::revenue');
+        return $user->can('replicate_attendance::report');
     }
 
     /**
@@ -103,6 +103,6 @@ class OtherRevenuePolicy
      */
     public function reorder(User $user): bool
     {
-        return $user->can('reorder_other::revenue');
+        return $user->can('reorder_attendance::report');
     }
 }
