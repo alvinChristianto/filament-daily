@@ -32,9 +32,9 @@ class SparepartShipmentResource extends Resource
 {
     protected static ?string $model = SparepartShipment::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-c-arrow-up-tray';
 
-    protected static ?string $navigationLabel = 'Transaksi Sparepart';
+    protected static ?string $navigationLabel = 'Transaksi Jual Sparepart';
     protected static ?string $navigationGroup = 'Master Sparepart';
 
     protected static ?string $modelLabel = 'Transaksi Sparepart';
