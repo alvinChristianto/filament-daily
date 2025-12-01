@@ -44,8 +44,12 @@ class ExpensesResource extends Resource
             'BIAYA_SPAREPART' => 'BIAYA_SPAREPART',
             'BIAYA_SERVICE_MOTOR' => 'BIAYA_SERVICE_MOTOR',
             'MAKAN_MINUM_SERVICE_AC' => 'MAKAN_MINUM_SERVICE_AC',
-            'BENSIN' => 'BENSIN',
-            'LAIN-LAIN' => 'LAIN-LAIN',
+            // 'BENSIN' => 'BENSIN',
+            'BENSIN_SERVICE_AC' => 'BENSIN_SERVICE_AC',
+            'BENSIN_SPAREPART' => 'BENSIN_SPAREPART',
+            // 'LAIN-LAIN' => 'LAIN-LAIN',
+            'LAIN-LAIN_SERVICE_AC' => 'LAIN-LAIN_SERVICE_AC',
+            'LAIN-LAIN_SPAREPART' => 'LAIN-LAIN_SPAREPART',
         ];
 
         function calculatePricePer($price_per, $amount)
