@@ -12,17 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sparepart_expenses', function (Blueprint $table) {
-            $table->id();
+
+            $table->string('id_transaction')->primary();
 
             $table->string('supplier_name', length: 100);
-            
+
             $table->json('expense_sparepart_detail')->nullable(); //sparepart_name, buy_price, status, buy_amount etc
 
             $table->integer('expense_price_total')->nullable();
             $table->text('expense_notes')->nullable();
             $table->json('expense_payment_detail')->nullable();
-            $table->foreignId('id_payment')->references('id')->on('payments');
-            $table->enum('status', ['LUNAS', 'DP']);
+            $table->enum('status', ['LUNAS', 'DP', 'BON']);
 
             $table->timestamps();
         });

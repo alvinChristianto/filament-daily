@@ -4,12 +4,14 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\SparepartExpenseResource\Pages;
 use App\Filament\Resources\SparepartExpenseResource\RelationManagers;
+use App\Models\Payment;
 use App\Models\SparepartExpense;
 use Carbon\Carbon;
 use Filament\Forms;
 use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -41,9 +43,12 @@ class SparepartExpenseResource extends Resource
                 Forms\Components\TextInput::make('supplier_name')
                     ->required()
                     ->label('Nama Suppliyer/tempat pembelian')
-                    ->helperText('Agar lebih mudah dalam pendataan, isikan dengan format <NAMA SUPLIYER | TANGGAL TRANSAKSI> ')
-                    ->maxLength(100)
-                    ->columnSpanFull(),
+                    ->helperText('Agar lebih mudah dalam pendataan, isikan dengan format <NAMA SUPLIYER | KOTA> ')
+                    ->maxLength(100),
+                // Forms\Components\TextInput::make('supplier_phone')
+                //     ->label('Nomor Telp Supliyer')
+                //     ->tel(),
+                //notelp
 
                 Fieldset::make('Data semua barang dibeli dari suppliyer ini')
                     ->schema([
@@ -56,7 +61,7 @@ class SparepartExpenseResource extends Resource
                                     ->maxLength(255)
                                     ->columnSpanFull(),
                                 Forms\Components\TextInput::make('buy_price')
-                                    ->label('Harga beli barang')
+                                    ->label('Harga beli barang keseluruhan')
                                     ->numeric()
                                     ->prefix('Rp')
                                     ->mask(RawJs::make('$money($input)'))
@@ -111,31 +116,22 @@ class SparepartExpenseResource extends Resource
 
                             ])
                             ->columns(2)
-                            // ->columnSpanfull()
+                            ->grid(2)
+                            ->itemLabel(fn(array $state): ?string => $state['sparepart_name'] ?? null)
                             ->addActionLabel('Tambah Barang dibeli')
                             ->collapsed()
                             ->cloneable()
+                            ->disabledOn('edit')
+
 
                     ])->columns(1),
 
+
                 Fieldset::make('Data Pembayaran')
                     ->schema([
-
                         Forms\Components\Textarea::make('expense_notes')
                             ->label('Catatan pembayaran')
-                            ->columnSpanFull(),
-
-                        Forms\Components\KeyValue::make('expense_payment_detail')
-                            ->label('Detail Pembayaran')
-                            ->helperText('Isikan Pembayaran apakah DP atau lunas, Pada nominal bayar, diisi dengan nominal rupiah tanpa (titik) atau (koma)')
-                            ->addActionLabel('Tambah Pembayaran')
-                            // ->addable(false)
-                            ->deletable(false)
-                            ->keyLabel('Label Bayar')
-                            ->keyPlaceholder('DP1, DP2 atau LUNAS')
-                            // ->editableKeys(false)
-                            ->valueLabel('Nominal Bayar')
-                            ->required(),
+                            ->rows(4),
                         Forms\Components\TextInput::make('expense_price_total')
                             ->label('Harga Beli Keseluruhan')
                             ->helperText(new HtmlString('Masukkan data pembayaran pada kolom <b>DETAIL PEMBAYARAN</b>, lalu klik icon calculator'))
@@ -159,31 +155,60 @@ class SparepartExpenseResource extends Resource
                                         $set('expense_price_total', $sumValue);
                                     })
                             ),
+                        Repeater::make('expense_payment_detail')
+                            ->label('')
+                            ->schema([
+                                Forms\Components\TextInput::make('payment_category')
+                                    ->label('kategori pembayaran')
+                                    ->helperText('Isikan Pembayaran apakah DP1, DP2 atau LUNAS dst')
+                                    ->required(),
+                                Forms\Components\Select::make('id_payment_from')
+                                    ->label('metode pembayaran')
+                                    ->options(function (Get $get) {
+                                        return Payment::all()->pluck('name', 'name');
+                                    })
+                                    ->required(),
 
-                        // Forms\Components\Select::make('id_payment')
-                        // ->label('Metode pembayaran')
-                        // ->helperText('Isikan Status DP jika barang masih belum lunas, Isikan LUNAS jika barang sudah lunas')
-                        // ->options([
-                        //     'CASH' => 'CASH',
-                        //     'BCA' => 'BCA',
-                        // ])
-                        // ->required(),
-                        Forms\Components\Select::make('id_payment')
-                            ->label('metode pembayaran')
-                            ->relationship('payment', 'name')
-                            ->searchable()
-                            ->preload()
-                            ->required(),
+                                Forms\Components\TextInput::make('expense_price')
+                                    ->label('Nominal Pembayaran')
+                                    ->helperText(new HtmlString('Masukkan nominal pembayaran untuk kategori pembayaran ini'))
+                                    ->required()
+                                    ->mask(RawJs::make('$money($input)'))
+                                    ->stripCharacters(',')
+                                    ->numeric()
+                                    ->prefix('Rp'),
+                                Forms\Components\TextInput::make('id_payment_to')
+                                    ->label('Bank Tujuan Transfer / Cash')
+                                    ->helperText('Isikan nama bank tujuan transfer, atau isikan CASH jika pembayaran lewat cash')
+                                    ->required(),
+                                Forms\Components\TextInput::make('account_number')
+                                    ->label('Nomor Bank Tujuan')
+                                    ->helperText('Isikan nomor rekening, atau isikan CASH jika pembayaran lewat cash ')
+                                    ->required(),
+                                Forms\Components\DateTimePicker::make('transaction_date')
+                                    ->label('Tgl Pembayaran')
+                                    ->required(),
+
+                            ])->columns(3)
+                            ->columnSpanfull()
+                            ->addActionLabel('Tambah Pembayaran')
+                            ->itemLabel(fn(array $state): ?string => $state['payment_category'] ?? null)
+                            ->cloneable()
+                            // ->disabled(fn(string $context): bool => $context === 'edit')
+                            ->collapsible(),
+
+
                         Forms\Components\Select::make('status')
                             ->label('Status Pembayaran')
                             ->helperText('Isikan Status DP jika barang masih belum lunas, Isikan LUNAS jika barang sudah lunas')
                             ->options([
                                 'DP' => 'DP',
                                 'LUNAS' => 'LUNAS',
+                                'BON' => 'BON',
                             ])
                             ->required(),
 
-                    ]),
+                    ])->columns(2),
 
 
 
@@ -195,8 +220,9 @@ class SparepartExpenseResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->label('No'),
+                Tables\Columns\TextColumn::make('id_transaction')
+                    ->label('ID transaksi')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('supplier_name')
                     ->label('Nama suppliyer')
                     ->searchable()
@@ -205,11 +231,17 @@ class SparepartExpenseResource extends Resource
                     ->label('Harga beli total')
                     ->money('idr')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('status'),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->color(
+                        fn(string $state): string => match ($state) {
+                            'DP' => 'warning',
+                            'LUNAS' => 'success',
+                        }
+                    ),
 
-                Tables\Columns\TextColumn::make('payment.name')
-                    ->label('metode bayar'),
-                Tables\Columns\TextColumn::make('expense_notes'),
+                Tables\Columns\TextColumn::make('expense_notes')
+                    ->label('Catatan Pembelian'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -252,13 +284,14 @@ class SparepartExpenseResource extends Resource
                     }),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ]);
+            ])->defaultSort('created_at', 'desc');
     }
 
     public static function getRelations(): array
