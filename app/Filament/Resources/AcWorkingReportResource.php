@@ -339,6 +339,7 @@ class AcWorkingReportResource extends Resource
                     ->options([
                         'SUCCESS' => 'LUNAS',
                         'DP' => 'DP',
+                        'BON' => 'BON', //->tambahkan di database dan filter 
                     ])
             ]);
     }

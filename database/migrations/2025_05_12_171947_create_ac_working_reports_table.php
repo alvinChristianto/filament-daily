@@ -31,7 +31,7 @@ return new class extends Migration
             $table->integer('discount')->nullable();
 
             $table->string('nota_ac_image')->nullable();
-            $table->enum('status', ['SUCCESS', 'DP', 'FAILED', 'OTHER']);
+            $table->enum('status', ['SUCCESS', 'DP', 'BON','FAILED', 'OTHER']);
             $table->dateTime('next_service_date');
 
             $table->timestamps();
