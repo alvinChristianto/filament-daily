@@ -378,6 +378,7 @@ class AcWorkingReportResource extends Resource
                     ->color(fn(string $state): string => match ($state) {
                         'SUCCESS' => 'success',
                         'DP' => 'danger',
+                        'BON' => 'danger',
                         'OTHER' => 'info',
                         'FAILED' => 'danger',
                     }),
