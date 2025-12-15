@@ -237,6 +237,7 @@ class SparepartExpenseResource extends Resource
                         fn(string $state): string => match ($state) {
                             'DP' => 'warning',
                             'LUNAS' => 'success',
+                            'BON' => 'warning',
                         }
                     ),
 
