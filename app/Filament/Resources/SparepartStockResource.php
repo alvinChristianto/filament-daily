@@ -50,9 +50,11 @@ class SparepartStockResource extends Resource
                         'STOCK_IN' => 'STOCK_IN',
                         'STOCK_SOLD_MAINSTORE' => 'STOCK_SOLD_MAINSTORE',
                         'STOCK_SOLD_AC' => 'STOCK_SOLD_AC',
+                        'ADJUST_PLUS' => 'ADJUST_PLUS',
+                        'ADJUST_MINUS' => 'ADJUST_MINUS',
                         'RETURNED' => 'RETURNED',
                     ])
-                    ->helperText(str('**STOCK_IN**: Stock masuk ke Gudang, <br> **STOCK_SOLD_MAINSTORE**: Stock yang keluar karena dijual, <br> **STOCK_SOLD_AC**: Stock yang keluar karena pengerjaan AC, <br> **RETURNED**: Stock yang kembali ke Gudang ')->inlineMarkdown()->toHtmlString())
+                    ->helperText(str('**STOCK_IN**: Stock masuk ke Gudang, <br> **STOCK_SOLD_MAINSTORE**: Stock yang keluar karena dijual, <br> **STOCK_SOLD_AC**: Stock yang keluar karena pengerjaan AC, <br> **ADJUST_PLUS**: Menambah stok karena fisik lebih banyak dari sistem, <br> **ADJUST_MINUS**: Mengurangi stok karena fisik lebih sedikit (hilang/rusak) ')->inlineMarkdown()->toHtmlString())
                     ->required(),
                 Forms\Components\TextInput::make('amount')
                     ->label('Jumlah sparepart')
@@ -87,6 +89,8 @@ class SparepartStockResource extends Resource
                         'STOCK_IN' => 'info',
                         'STOCK_SOLD_MAINSTORE' => 'success',
                         'STOCK_SOLD_AC' => 'success',
+                        'ADJUST_PLUS' => 'warning',
+                        'ADJUST_MINUS' => 'warning',
                         'RETURNED' => 'danger',
                     }),
                 Tables\Columns\TextColumn::make('amount')
@@ -113,12 +117,14 @@ class SparepartStockResource extends Resource
                         'STOCK_IN' => 'STOCK_IN',
                         'STOCK_SOLD_MAINSTORE' => 'STOCK_SOLD_MAINSTORE',
                         'STOCK_SOLD_AC' => 'STOCK_SOLD_AC',
+                        'ADJUST_PLUS' => 'ADJUST_PLUS',
+                        'ADJUST_MINUS' => 'ADJUST_MINUS',
                         'RETURNED' => 'RETURNED',
                     ]),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

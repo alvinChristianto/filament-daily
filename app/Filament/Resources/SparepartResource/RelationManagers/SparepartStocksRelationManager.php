@@ -42,6 +42,8 @@ class SparepartStocksRelationManager extends RelationManager
                         'STOCK_IN' => 'info',
                         'STOCK_SOLD_MAINSTORE' => 'success',
                         'STOCK_SOLD_AC' => 'success',
+                        'ADJUST_PLUS' => 'warning',
+                        'ADJUST_MINUS' => 'warning',
                         'RETURNED' => 'danger',
                     }),
                 Tables\Columns\TextColumn::make('amount')
